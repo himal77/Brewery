@@ -8,8 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.UUID;
 
 @Component
 public class DefaultBeer implements CommandLineRunner {
@@ -30,6 +28,7 @@ public class DefaultBeer implements CommandLineRunner {
                 .beerName("Mango Bobs")
                 .beerStyle(BeerStyleEnum.IPA)
                 .price(BigDecimal.valueOf(12.23))
+                .maxOnHand(100)
                 .build();
 
         Beer galaxyCat = Beer.builder()
@@ -37,6 +36,7 @@ public class DefaultBeer implements CommandLineRunner {
                 .beerName("Galaxy Cat")
                 .beerStyle(BeerStyleEnum.PALE_ALE)
                 .price(BigDecimal.valueOf(11.13))
+                .maxOnHand(250)
                 .build();
 
         Beer pinball = Beer.builder()
@@ -44,6 +44,7 @@ public class DefaultBeer implements CommandLineRunner {
                 .beerName("Pinball Porter")
                 .beerStyle(BeerStyleEnum.PORTER)
                 .price(BigDecimal.valueOf(12.23))
+                .maxOnHand(200)
                 .build();
 
         beerRepository.save(galaxyCat);
