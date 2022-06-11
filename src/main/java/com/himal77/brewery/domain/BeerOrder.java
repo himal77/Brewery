@@ -11,10 +11,10 @@ import javax.persistence.Id;
 @Setter
 @Getter
 @Builder
-public class Order {
+public class BeerOrder {
     @Id
     private String orderId;
     private String customerId;
     private String beerId;
-    private String quantity;
+    private Integer quantity;
 }

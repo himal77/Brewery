@@ -31,7 +31,7 @@ public class InventoryService {
         for (Inventory inventory : inventoryList) {
             beerInventoryList.put(
                     beerService.findBeerByUpd(inventory.getBeerUpc()),
-                    inventory.getQuantityInHand());
+                    inventory.getQuantityOnHand());
         }
         return beerInventoryList;
     }
