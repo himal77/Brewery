@@ -1,6 +1,7 @@
 package com.himal77.brewery.services;
 
 import com.himal77.brewery.domain.Brewed;
+import com.himal77.brewery.exception.BeerNotFoundException;
 import com.himal77.brewery.repositories.BreweryRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +23,9 @@ public class BreweryService {
         this.inventoryService = inventoryService;
     }
 
-    public void brew(String beerUpc, Integer quantity) throws Exception {
+    public void brew(String beerUpc, Integer quantity) {
         if(!isBeerAvailable(beerUpc)) {
-            throw new Exception("Beer Upc not found");
+            throw new BeerNotFoundException();
         }
 
         Brewed brewed = Brewed.builder()
@@ -35,6 +36,7 @@ public class BreweryService {
                 .quantity(quantity)
                 .build();
         breweryRepository.save(brewed);
+        inventoryService.save(beerUpc, quantity);
     }
 
     private boolean isBeerAvailable(String beerUpc) {

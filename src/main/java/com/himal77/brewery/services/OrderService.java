@@ -11,9 +11,11 @@ import java.util.List;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final InventoryService inventoryService;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, InventoryService inventoryService) {
         this.orderRepository = orderRepository;
+        this.inventoryService = inventoryService;
     }
 
     public List<BeerOrder> findAll(String resolve) {
@@ -25,5 +27,9 @@ public class OrderService {
 
     public List<BeerOrder> getCustomerSpecificOrder(String customerId) {
         return orderRepository.findAllByCustomerId(customerId);
+    }
+
+    public void placeOrder(BeerOrder beerOrder) {
+        // TODO check if the beer exist in the inventory
     }
 }

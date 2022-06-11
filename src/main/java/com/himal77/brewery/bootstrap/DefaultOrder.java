@@ -20,21 +20,21 @@ public class DefaultOrder implements CommandLineRunner {
                 .customerId("1")
                 .beerId(DefaultBeer.BEER_1_UPC)
                 .orderId("1")
-                .quantity(100)
+                .quantity(10)
                 .build();
 
         BeerOrder order2 = BeerOrder.builder()
                 .customerId("2")
                 .beerId(DefaultBeer.BEER_2_UPC)
                 .orderId("2")
-                .quantity(100)
+                .quantity(10)
                 .build();
 
         BeerOrder order3 = BeerOrder.builder()
-                .customerId("2")
+                .customerId("3")
                 .beerId(DefaultBeer.BEER_3_UPC)
                 .orderId("3")
-                .quantity(100)
+                .quantity(5)
                 .build();
 
         orderRepository.save(order1);
