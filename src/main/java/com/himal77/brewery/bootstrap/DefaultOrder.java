@@ -26,14 +26,14 @@ public class DefaultOrder implements CommandLineRunner {
         BeerOrder order2 = BeerOrder.builder()
                 .customerId("2")
                 .beerId(DefaultBeer.BEER_2_UPC)
-                .orderId("1")
+                .orderId("2")
                 .quantity(100)
                 .build();
 
         BeerOrder order3 = BeerOrder.builder()
                 .customerId("2")
                 .beerId(DefaultBeer.BEER_3_UPC)
-                .orderId("1")
+                .orderId("3")
                 .quantity(100)
                 .build();
 
