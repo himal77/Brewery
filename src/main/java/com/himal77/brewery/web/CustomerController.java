@@ -1,7 +1,10 @@
 package com.himal77.brewery.web;
 
 import com.himal77.brewery.domain.BeerOrder;
+import com.himal77.brewery.domain.Brewery;
 import com.himal77.brewery.domain.Customer;
+import com.himal77.brewery.services.BreweryService;
+import com.himal77.brewery.services.CustomerService;
 import com.himal77.brewery.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,19 +14,25 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CustomerController {
 
-    private final OrderService orderService;
+    private final CustomerService customerService;
 
-    public CustomerController(OrderService orderService) {
-        this.orderService = orderService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
-    @GetMapping("/myorder")
-    public ResponseEntity<Object> getMyOrders(@RequestParam String customerId) {
-        return new ResponseEntity<>(orderService.getCustomerSpecificOrder(customerId), HttpStatus.OK);
+    @GetMapping("/getAll")
+    public ResponseEntity<Object> getAllBrewery() {
+        return new ResponseEntity<>(customerService.getAllCustomer(), HttpStatus.OK);
     }
 
-    @GetMapping("/placeorder")
-    public ResponseEntity<Object> placeOrder(@RequestBody BeerOrder beerOrder) {
-        return new ResponseEntity<>(orderService.placeOrder(beerOrder), HttpStatus.OK);
+    @GetMapping("/{customerId}")
+    public ResponseEntity<Object> getBrewery(@PathVariable String customerId) {
+        return new ResponseEntity<>(customerService.getCustomer(customerId), HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Object> addBrewery(@RequestBody Customer customer) {
+        return new ResponseEntity<>(customerService.save(customer), HttpStatus.OK);
     }
 }
