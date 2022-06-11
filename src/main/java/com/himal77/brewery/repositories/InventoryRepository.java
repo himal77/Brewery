@@ -1,6 +1,5 @@
 package com.himal77.brewery.repositories;
 
-import com.himal77.brewery.domain.Beer;
 import com.himal77.brewery.domain.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 

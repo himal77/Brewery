@@ -26,9 +26,6 @@ public class DefaultBeer implements CommandLineRunner {
 
     public void run(String... args) {
         Beer mangoBobs = Beer.builder()
-                .id(UUID.randomUUID())
-                .createdDate(new Timestamp(System.currentTimeMillis()))
-                .lastModifiedDate(new Timestamp(System.currentTimeMillis()))
                 .upc(BEER_1_UPC)
                 .beerName("Mango Bobs")
                 .beerStyle(BeerStyleEnum.IPA)
@@ -36,9 +33,6 @@ public class DefaultBeer implements CommandLineRunner {
                 .build();
 
         Beer galaxyCat = Beer.builder()
-                .id(UUID.randomUUID())
-                .createdDate(new Timestamp(System.currentTimeMillis()))
-                .lastModifiedDate(new Timestamp(System.currentTimeMillis()))
                 .upc(BEER_2_UPC)
                 .beerName("Galaxy Cat")
                 .beerStyle(BeerStyleEnum.PALE_ALE)
@@ -46,9 +40,6 @@ public class DefaultBeer implements CommandLineRunner {
                 .build();
 
         Beer pinball = Beer.builder()
-                .id(UUID.randomUUID())
-                .createdDate(new Timestamp(System.currentTimeMillis()))
-                .lastModifiedDate(new Timestamp(System.currentTimeMillis()))
                 .upc(BEER_3_UPC)
                 .beerName("Pinball Porter")
                 .beerStyle(BeerStyleEnum.PORTER)
