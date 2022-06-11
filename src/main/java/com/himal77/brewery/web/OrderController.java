@@ -16,13 +16,23 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/findall")
-    public ResponseEntity<Object> findAll(@RequestParam(required = false) String resolve) {
-        return new ResponseEntity<>(orderService.findAll(resolve), HttpStatus.OK);
+    @GetMapping("/getall")
+    public ResponseEntity<Object> findAllOrder() {
+        return new ResponseEntity<>(orderService.findAllOrder(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getall/today")
+    public ResponseEntity<Object> findAllOrderFromToday() {
+        return new ResponseEntity<>(orderService.findAllOrderOfToday(), HttpStatus.OK);
     }
 
     @GetMapping("/placeorder")
     public ResponseEntity<Object> placeOrder(@RequestBody BeerOrder beerOrder) {
         return new ResponseEntity<>(orderService.placeOrder(beerOrder), HttpStatus.OK);
+    }
+
+    @GetMapping("/getbycustomerid")
+    public ResponseEntity<Object> getMyOrders(@RequestParam String customerId) {
+        return new ResponseEntity<>(orderService.getCustomerSpecificOrder(customerId), HttpStatus.OK);
     }
 }

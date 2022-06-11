@@ -1,14 +1,12 @@
 package com.himal77.brewery.web;
 
+import com.himal77.brewery.domain.BeerOrder;
 import com.himal77.brewery.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 @RestController
 public class CustomerController {
 
@@ -21,5 +19,10 @@ public class CustomerController {
     @GetMapping("/myorder")
     public ResponseEntity<Object> getMyOrders(@RequestParam String customerId) {
         return new ResponseEntity<>(orderService.getCustomerSpecificOrder(customerId), HttpStatus.OK);
+    }
+
+    @GetMapping("/placeorder")
+    public ResponseEntity<Object> placeOrder(@RequestBody BeerOrder beerOrder) {
+        return new ResponseEntity<>(orderService.placeOrder(beerOrder), HttpStatus.OK);
     }
 }

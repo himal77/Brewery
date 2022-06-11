@@ -26,7 +26,7 @@ public class BreweryController {
          return new ResponseEntity(null, HttpStatus.OK);
     }
 
-    @GetMapping("/findall")
+    @GetMapping("/getall")
     public ResponseEntity<Object> findall() {
         return new ResponseEntity<>(breweryService.findAll(), HttpStatus.OK);
     }

@@ -4,10 +4,7 @@ import com.himal77.brewery.services.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/inventory")
 @RestController
@@ -20,12 +17,27 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-    @GetMapping("/findall")
+    @GetMapping("/getall")
     public ResponseEntity<Object> findAll(@RequestParam(required = false) String resolve) {
-        if(resolve != null && resolve.equalsIgnoreCase("beerdetails")) {
-//            String inventoryDetailInJson =new ObjectMapper().writeValueAsString(inventoryService.findAllWithBeerDetails());
-            return new ResponseEntity<>(inventoryService.findAllWithBeerDetails(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(inventoryService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(inventoryService.findAll(resolve), HttpStatus.OK);
     }
+
+    @GetMapping("/addbeer")
+    public ResponseEntity<Object> addBeerToInventory(@RequestParam String beerUpc, @RequestParam Integer quantity) {
+        inventoryService.addBeer(beerUpc, quantity);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/removebeer")
+    public ResponseEntity<Object> removeBeerFromInventory(@RequestParam String beerUpc) {
+        inventoryService.removeBeer(beerUpc);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/removebeerquantity")
+    public ResponseEntity<Object> removeBeerQuantityFromInventory(@RequestParam String beerUpc, @RequestParam Integer quantity) {
+        inventoryService.reduceBeerQuantityInInventory(beerUpc, quantity);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

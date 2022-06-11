@@ -2,6 +2,7 @@ package com.himal77.brewery.services;
 
 import com.himal77.brewery.domain.Beer;
 import com.himal77.brewery.domain.Inventory;
+import com.himal77.brewery.exception.BeerNotAvailableInInventoryException;
 import com.himal77.brewery.exception.BeerNotFoundException;
 import com.himal77.brewery.exception.InventoryFullException;
 import com.himal77.brewery.repositories.InventoryRepository;
@@ -13,6 +14,9 @@ import java.util.Map;
 
 @Service
 public class InventoryService {
+
+    private final String RESOLVE_BEERDETAILS = "beerdetails";
+
     private final InventoryRepository inventoryRepository;
     private final BeerService beerService;
 
@@ -21,12 +25,15 @@ public class InventoryService {
         this.beerService = beerService;
     }
 
-    public List<Inventory> findAll() {
+    public Object findAll(String resolve) {
+        if (RESOLVE_BEERDETAILS.equalsIgnoreCase(resolve)) {
+            return findAllWithBeerDetails();
+        }
         return inventoryRepository.findAll();
     }
 
-    public void save(String beerUpc, Integer quantity) {
-        if (isBeerAvailable(beerUpc)) {
+    public void addBeer(String beerUpc, Integer quantity) {
+        if (!beerService.isBeerAvailable(beerUpc)) {
             throw new BeerNotFoundException();
         }
         Inventory inventory = inventoryRepository.findById(beerUpc)
@@ -38,7 +45,6 @@ public class InventoryService {
         if (inventory.getMaxOnHand() < (quantity + inventory.getQuantityOnHand())) {
             throw new InventoryFullException("Inventory will be overloaded with " + quantity + " beer");
         }
-
         inventory.setQuantityOnHand(inventory.getQuantityOnHand() + quantity);
         inventoryRepository.save(inventory);
     }
@@ -56,12 +62,8 @@ public class InventoryService {
         return beerInventoryList;
     }
 
-    private boolean isBeerAvailable(String beerUpc) {
-        return beerService.findBeerByUpc(beerUpc) != null;
-    }
-
     public boolean isBeerAvailableInInventory(String beerUpc, Integer quantity) {
-        if (isBeerAvailable(beerUpc)) {
+        if (!beerService.isBeerAvailable(beerUpc)) {
             throw new BeerNotFoundException();
         }
         Inventory inventory = inventoryRepository.findById(beerUpc)
@@ -73,8 +75,21 @@ public class InventoryService {
     }
 
     public void reduceBeerQuantityInInventory(String beerUpc, Integer quantity) {
+        if (!isBeerAvailableInInventory(beerUpc, quantity)) {
+            throw new BeerNotAvailableInInventoryException("Beer No Available in the inventory");
+        }
+
         inventoryRepository.findById(beerUpc).ifPresent(
-                (inventory) -> inventory.setQuantityOnHand(inventory.getQuantityOnHand() - quantity));
+                inv -> inv.setQuantityOnHand(Math.max((inv.getQuantityOnHand() - quantity), 0)));
         // TODO we can add alert via sms to owner that the inventory is becoming empty.
+    }
+
+    public void removeBeer(String beerUpc) {
+        if (!isBeerAvailableInInventory(beerUpc, 0)) {
+            throw new BeerNotAvailableInInventoryException("Beer No Available in the inventory");
+        }
+
+        inventoryRepository.findById(beerUpc)
+                .ifPresent(inv -> inv.setQuantityOnHand(0));
     }
 }

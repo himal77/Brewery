@@ -36,7 +36,7 @@ public class BreweryService {
                 .quantity(quantity)
                 .build();
         breweryRepository.save(brewed);
-        inventoryService.save(beerUpc, quantity);
+        inventoryService.addBeer(beerUpc, quantity);
     }
 
     private boolean isBeerAvailable(String beerUpc) {
