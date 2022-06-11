@@ -19,8 +19,6 @@ public class Beer{
     private String beerName;
     private BeerStyleEnum beerStyle;
     private BigDecimal price;
-    private Integer minOnHand = 10;
-    private Integer maxOnHand;
 
     @Override
     public String toString() {

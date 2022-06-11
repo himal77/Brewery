@@ -40,7 +40,7 @@ public class BreweryService {
     }
 
     private boolean isBeerAvailable(String beerUpc) {
-        return beerService.findBeerByUpd(beerUpc) != null;
+        return beerService.findBeerByUpc(beerUpc) != null;
     }
 
     public List<Brewed> findAll() {

@@ -18,7 +18,7 @@ public class BeerService {
     public List<Beer> findAll() {
         return beerRepository.findAll();
     }
-    public Beer findBeerByUpd(String upc) {
+    public Beer findBeerByUpc(String upc) {
         return beerRepository.findByUpc(upc);
     }
 }

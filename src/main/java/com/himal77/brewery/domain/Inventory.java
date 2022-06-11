@@ -19,4 +19,6 @@ public class Inventory {
     @Id
     private String beerUpc;
     private Integer quantityOnHand;
+    private Integer minOnHand = 5;
+    private Integer maxOnHand = 100;
 }

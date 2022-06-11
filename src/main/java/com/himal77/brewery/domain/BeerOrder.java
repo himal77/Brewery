@@ -15,6 +15,6 @@ public class BeerOrder {
     @Id
     private String orderId;
     private String customerId;
-    private String beerId;
+    private String beerUpc;
     private Integer quantity;
 }

@@ -26,20 +26,20 @@ public class InventoryService {
     }
 
     public void save(String beerUpc, Integer quantity) {
-        if(!isBeerAvailable(beerUpc)){
+        if (isBeerAvailable(beerUpc)) {
             throw new BeerNotFoundException();
         }
-        if(isInventoryOverloaded(beerUpc, quantity)) {
+        Inventory inventory = inventoryRepository.findById(beerUpc)
+                .orElse(Inventory.builder()
+                        .quantityOnHand(0)
+                        .beerUpc(beerUpc)
+                        .build());
+
+        if (inventory.getMaxOnHand() < (quantity + inventory.getQuantityOnHand())) {
             throw new InventoryFullException("Inventory will be overloaded with " + quantity + " beer");
         }
 
-        Inventory inventory = inventoryRepository.findById(beerUpc).orElse(null);
-        if(inventory == null) {
-            inventory = Inventory.builder().beerUpc(beerUpc).quantityOnHand(quantity).build();
-        } else {
-            inventory.setQuantityOnHand(inventory.getQuantityOnHand() + quantity);
-        }
-
+        inventory.setQuantityOnHand(inventory.getQuantityOnHand() + quantity);
         inventoryRepository.save(inventory);
     }
 
@@ -50,24 +50,31 @@ public class InventoryService {
 
         for (Inventory inventory : inventoryList) {
             beerInventoryList.put(
-                    beerService.findBeerByUpd(inventory.getBeerUpc()),
+                    beerService.findBeerByUpc(inventory.getBeerUpc()),
                     inventory.getQuantityOnHand());
         }
         return beerInventoryList;
     }
 
     private boolean isBeerAvailable(String beerUpc) {
-        return beerService.findBeerByUpd(beerUpc) != null;
+        return beerService.findBeerByUpc(beerUpc) != null;
     }
 
-    private boolean isInventoryOverloaded(String beerUpc, Integer quantity) {
-        Beer beer = beerService.findBeerByUpd(beerUpc);
-        Inventory inventory = inventoryRepository.findById(beerUpc).orElse(null);
-
-        if(inventory != null) {
-            return (inventory.getQuantityOnHand() + quantity) <= beer.getMaxOnHand();
-        } else {
-            return quantity <= beer.getMaxOnHand();
+    public boolean isBeerAvailableInInventory(String beerUpc, Integer quantity) {
+        if (isBeerAvailable(beerUpc)) {
+            throw new BeerNotFoundException();
         }
+        Inventory inventory = inventoryRepository.findById(beerUpc)
+                .orElse(Inventory.builder()
+                        .quantityOnHand(0)
+                        .beerUpc(beerUpc)
+                        .build());
+        return inventory.getQuantityOnHand() >= quantity;
+    }
+
+    public void reduceBeerQuantityInInventory(String beerUpc, Integer quantity) {
+        inventoryRepository.findById(beerUpc).ifPresent(
+                (inventory) -> inventory.setQuantityOnHand(inventory.getQuantityOnHand() - quantity));
+        // TODO we can add alert via sms to owner that the inventory is becoming empty.
     }
 }
