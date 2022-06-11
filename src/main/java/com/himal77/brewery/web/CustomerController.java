@@ -1,6 +1,7 @@
 package com.himal77.brewery.web;
 
 import com.himal77.brewery.domain.BeerOrder;
+import com.himal77.brewery.domain.Customer;
 import com.himal77.brewery.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

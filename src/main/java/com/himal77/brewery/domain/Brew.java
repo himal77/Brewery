@@ -12,11 +12,11 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Brewed {
+public class Brew {
     @Id
-    private String brewedId;
+    private String brewId;
     private String breweryId;
-    private String beerId;
+    private String beerUpc;
     private Integer quantity;
     private Timestamp brewedDate;
 }
