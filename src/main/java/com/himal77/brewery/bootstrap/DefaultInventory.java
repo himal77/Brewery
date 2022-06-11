@@ -20,17 +20,20 @@ public class DefaultInventory implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Inventory beer_1_inventory = Inventory.builder()
                 .beerUpc(DefaultBeer.BEER_1_UPC)
-                .quantityOnHand(5)
+                .quantityOnHand(100)
+                .maxOnHand(200)
                 .build();
 
         Inventory beer_2_inventory = Inventory.builder()
                 .beerUpc(DefaultBeer.BEER_2_UPC)
-                .quantityOnHand(7)
+                .quantityOnHand(70)
+                .maxOnHand(80)
                 .build();
 
         Inventory beer_3_inventory = Inventory.builder()
                 .beerUpc(DefaultBeer.BEER_3_UPC)
-                .quantityOnHand(3)
+                .quantityOnHand(30)
+                .maxOnHand(35)
                 .build();
 
         inventoryRepository.save(beer_1_inventory);
