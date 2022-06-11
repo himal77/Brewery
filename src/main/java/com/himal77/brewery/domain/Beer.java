@@ -32,4 +32,14 @@ public class Beer extends BaseEntity{
         this.upc = upc;
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "upc:'" + upc + '\'' +
+                ", beerName:'" + beerName + '\'' +
+                ", beerStyle:" + beerStyle +
+                ", price:" + price +
+                '}';
+    }
 }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BeerRepository extends JpaRepository<Beer, Integer> {
+    Beer findByUpc(String upc);
 }
