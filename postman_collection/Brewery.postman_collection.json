@@ -1,0 +1,611 @@
+{
+	"info": {
+		"_postman_id": "e6b08002-443d-4dd2-89e5-9e084330b246",
+		"name": "Brewery",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19773350"
+	},
+	"item": [
+		{
+			"name": "Beer",
+			"item": [
+				{
+					"name": "beers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/beers",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"beers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "beers?beerUpc=",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/beers?beerUpc=0631234300019",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"beers"
+							],
+							"query": [
+								{
+									"key": "beerUpc",
+									"value": "0631234300019"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "beers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"upc\":\"123\",\n    \"beerName\":\"Himal\",\n    \"beerStyle\":\"WHEAT\",\n    \"price\":\"23.2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/beers",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"beers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "beers",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"beerName\":\"Himal_puri\",\n    \"beerStyle\":\"GOSE\",\n    \"price\":\"23.2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/beers/{{beerUpc}}",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"beers",
+								"{{beerUpc}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Brewery",
+			"item": [
+				{
+					"name": "/breweries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/breweries",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"breweries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/breweries?breweryId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/breweries?breweryId=brewery1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"breweries"
+							],
+							"query": [
+								{
+									"key": "breweryId",
+									"value": "brewery1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/breweries",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"breweryId\":\"brewery1\",\n    \"breweryName\":\"Himal Brewery private limited\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/breweries",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"breweries"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BrewOrder",
+			"item": [
+				{
+					"name": "/breworders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/breworders",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"breworders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/breworders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brewId\": \"brew1\",\n    \"breweryId\":\"brewery1\",\n    \"beerUpc\":\"{{beerUpc}}\",\n    \"quantity\":12\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/breworders",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"breworders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "/customers/{customerId}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/customers/{{customerId}}",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/customers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\":\"customer1\",\n    \"lastName\":\"Puri\",\n    \"firstName\":\"Himal\",\n    \"address\":\"Vienna\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/customers",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CustomerOrder",
+			"item": [
+				{
+					"name": "/customerorders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/customerorders",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"customerorders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/customerorders?date=",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/customerorders?date=2022-06-12",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"customerorders"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2022-06-12"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/customerorders?customerId=",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/customerorders?customerId=customer1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"customerorders"
+							],
+							"query": [
+								{
+									"key": "customerId",
+									"value": "customer1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/customerorders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\":\"customer1\",\n    \"beerUpc\":\"{{beerUpc}}\",\n    \"quantity\":5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/customerorders",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"customerorders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "/inventory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/inventory",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/inventory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"beerUpc\":\"{{beerUpc}}\",\n    \"quantityOnHand\":14\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/inventory",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/inventory/{beerUpc}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/inventory/{{beerUpc}}",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"inventory",
+								"{{beerUpc}}"
+							],
+							"query": [
+								{
+									"key": "quantity",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "findall_beer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/beers/findall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"beers",
+						"findall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "inventory_findall",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "/inventory/findall?resolve=beerdetails",
+					"path": [
+						"inventory",
+						"findall"
+					],
+					"query": [
+						{
+							"key": "resolve",
+							"value": "beerdetails"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order_findall",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/order/getall/today",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"order",
+						"getall",
+						"today"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "customer_myorder",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/customer/myorder?customerId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"myorder"
+					],
+					"query": [
+						{
+							"key": "customerId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "brewery_brew",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/brewery/brew?beerUpc=0631234200036&quantity=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"brewery",
+						"brew"
+					],
+					"query": [
+						{
+							"key": "beerUpc",
+							"value": "0631234200036"
+						},
+						{
+							"key": "quantity",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "brewery_findall",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/brewery/findall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"brewery",
+						"findall"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "beerUpc",
+			"value": "123"
+		},
+		{
+			"key": "customerId",
+			"value": "customer1"
+		}
+	]
+}
