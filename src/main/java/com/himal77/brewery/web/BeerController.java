@@ -18,22 +18,20 @@ public class BeerController {
         this.beerService = beerService;
     }
 
-    @GetMapping("/getall")
-    public ResponseEntity<Object> findAll() {
+    @GetMapping
+    public ResponseEntity<Object> findAll(@RequestParam(required = false) String beerUpc) {
+        if (beerUpc != null) {
+            return new ResponseEntity<>(beerService.findBeerByUpc(beerUpc), HttpStatus.OK);
+        }
         return new ResponseEntity<>(beerService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/get/{beerUpc}")
-    public ResponseEntity<Object> findByBeerUpc(@PathVariable String beerUpc) {
-        return new ResponseEntity<>(beerService.findBeerByUpc(beerUpc), HttpStatus.OK);
-    }
-
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<Object> addBeer(@RequestBody Beer beer) {
         return new ResponseEntity<>(beerService.save(beer), HttpStatus.OK);
     }
 
-    @PutMapping("/update/{beerUpc}")
+    @PutMapping("/{beerUpc}")
     public ResponseEntity<Object> updateBeer(@RequestBody Beer beer, @PathVariable String beerUpc) {
         return new ResponseEntity<>(beerService.update(beer, beerUpc), HttpStatus.OK);
     }

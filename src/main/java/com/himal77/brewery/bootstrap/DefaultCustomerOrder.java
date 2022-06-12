@@ -1,7 +1,7 @@
 package com.himal77.brewery.bootstrap;
 
-import com.himal77.brewery.domain.BeerOrder;
-import com.himal77.brewery.repositories.OrderRepository;
+import com.himal77.brewery.domain.CustomerOrder;
+import com.himal77.brewery.repositories.CustomerOrderRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -9,17 +9,17 @@ import java.sql.Date;
 import java.util.UUID;
 
 @Component
-public class DefaultOrder implements CommandLineRunner {
+public class DefaultCustomerOrder implements CommandLineRunner {
 
-    private final OrderRepository orderRepository;
+    private final CustomerOrderRepository customerOrderRepository;
 
-    public DefaultOrder(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public DefaultCustomerOrder(CustomerOrderRepository customerOrderRepository) {
+        this.customerOrderRepository = customerOrderRepository;
     }
 
     @Override
     public void run(String... args) {
-        BeerOrder order1 = BeerOrder.builder()
+        CustomerOrder order1 = CustomerOrder.builder()
                 .customerId("1")
                 .beerUpc(DefaultBeer.BEER_1_UPC)
                 .orderId(UUID.randomUUID())
@@ -27,7 +27,7 @@ public class DefaultOrder implements CommandLineRunner {
                 .date(new Date(22, 5, 10))
                 .build();
 
-        BeerOrder order2 = BeerOrder.builder()
+        CustomerOrder order2 = CustomerOrder.builder()
                 .customerId("2")
                 .beerUpc(DefaultBeer.BEER_2_UPC)
                 .orderId(UUID.randomUUID())
@@ -35,7 +35,7 @@ public class DefaultOrder implements CommandLineRunner {
                 .date(new Date(22, 5, 11))
                 .build();
 
-        BeerOrder order3 = BeerOrder.builder()
+        CustomerOrder order3 = CustomerOrder.builder()
                 .customerId("3")
                 .beerUpc(DefaultBeer.BEER_3_UPC)
                 .orderId(UUID.randomUUID())
@@ -43,8 +43,8 @@ public class DefaultOrder implements CommandLineRunner {
                 .date(new Date(22, 5, 12))
                 .build();
 
-        orderRepository.save(order1);
-        orderRepository.save(order2);
-        orderRepository.save(order3);
+        customerOrderRepository.save(order1);
+        customerOrderRepository.save(order2);
+        customerOrderRepository.save(order3);
     }
 }

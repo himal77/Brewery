@@ -17,27 +17,24 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-    @GetMapping("/getall")
+    @GetMapping
     public ResponseEntity<Object> findAll(@RequestParam(required = false) String resolve) {
         return new ResponseEntity<>(inventoryService.findAll(resolve), HttpStatus.OK);
     }
 
-    @GetMapping("/addbeer")
+    @PostMapping
     public ResponseEntity<Object> addBeerToInventory(@RequestParam String beerUpc, @RequestParam Integer quantity) {
         inventoryService.addBeer(beerUpc, quantity);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/removebeer")
-    public ResponseEntity<Object> removeBeerFromInventory(@RequestParam String beerUpc) {
-        inventoryService.removeBeer(beerUpc);
+    @DeleteMapping("/{beerUpc}")
+    public ResponseEntity<Object> removeBeerQuantityFromInventory(@PathVariable String beerUpc, @RequestParam Integer quantity) {
+        if (quantity == 0) {
+            inventoryService.removeBeer(beerUpc);
+        } else {
+            inventoryService.reduceBeerQuantityInInventory(beerUpc, quantity);
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    @PostMapping("/removebeerquantity")
-    public ResponseEntity<Object> removeBeerQuantityFromInventory(@RequestParam String beerUpc, @RequestParam Integer quantity) {
-        inventoryService.reduceBeerQuantityInInventory(beerUpc, quantity);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
 }

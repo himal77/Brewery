@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Brew {
+public class BrewOrder {
     @Id
     private String brewId;
     private String breweryId;

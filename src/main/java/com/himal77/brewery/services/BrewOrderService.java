@@ -1,49 +1,47 @@
 package com.himal77.brewery.services;
 
-import com.himal77.brewery.domain.Brew;
+import com.himal77.brewery.domain.BrewOrder;
 import com.himal77.brewery.exception.BeerNotFoundException;
-import com.himal77.brewery.repositories.BrewRepository;
+import com.himal77.brewery.repositories.BrewOrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class BrewService {
+public class BrewOrderService {
 
     private final BeerService beerService;
-    private final BrewRepository breweryRepository;
+    private final BrewOrderRepository breweryRepository;
     private final InventoryService inventoryService;
 
-    private int brewId = 1;
-
-    public BrewService(BeerService beerService, BrewRepository breweryRepository, InventoryService inventoryService) {
+    public BrewOrderService(BeerService beerService, BrewOrderRepository breweryRepository, InventoryService inventoryService) {
         this.beerService = beerService;
         this.breweryRepository = breweryRepository;
         this.inventoryService = inventoryService;
     }
 
-    public void brew(String breweryId, String beerUpc, Integer quantity) {
-        if(!isBeerAvailable(beerUpc)) {
+    public void brew(BrewOrder brewOrder) {
+        if(!isBeerAvailable(brewOrder.getBeerUpc())) {
             throw new BeerNotFoundException();
         }
 
-        Brew brewed = Brew.builder()
-                .brewId(String.valueOf(brewId++))
-                .breweryId(breweryId)
+        BrewOrder brewed = BrewOrder.builder()
+                .brewId(brewOrder.getBrewId())
+                .breweryId(brewOrder.getBreweryId())
                 .brewedDate(new Timestamp(System.currentTimeMillis()))
-                .beerUpc(beerUpc)
-                .quantity(quantity)
+                .beerUpc(brewOrder.getBeerUpc())
+                .quantity(brewOrder.getQuantity())
                 .build();
         breweryRepository.save(brewed);
-        inventoryService.addBeer(beerUpc, quantity);
+        inventoryService.addBeer(brewOrder.getBeerUpc(), brewOrder.getQuantity());
     }
 
     private boolean isBeerAvailable(String beerUpc) {
         return beerService.findBeerByUpc(beerUpc) != null;
     }
 
-    public List<Brew> findAll() {
+    public List<BrewOrder> findAll() {
         return breweryRepository.findAll();
     }
 }

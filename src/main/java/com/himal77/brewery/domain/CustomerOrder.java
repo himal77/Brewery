@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @Builder
-public class BeerOrder {
+public class CustomerOrder {
     @Id
     private UUID orderId;
     private String customerId;

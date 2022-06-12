@@ -1,6 +1,6 @@
 package com.himal77.brewery.bootstrap;
 
-import com.himal77.brewery.domain.BeerOrder;
+import com.himal77.brewery.domain.CustomerOrder;
 import com.himal77.brewery.services.OrderService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class TimelyCustomerOrder implements CommandLineRunner {
 
            while(true) {
             orderId++;
-            BeerOrder beerOrder = BeerOrder.builder()
+            CustomerOrder customerOrder = CustomerOrder.builder()
                     .orderId(UUID.randomUUID())
                     .date(new Date(System.currentTimeMillis()))
                     .time(new Time(System.currentTimeMillis()))
@@ -39,7 +39,7 @@ public class TimelyCustomerOrder implements CommandLineRunner {
                     .quantity(orderId)
                     .customerId(String.valueOf(orderId % 3))
                     .build();
-            orderService.placeOrder(beerOrder);
+            orderService.placeOrder(customerOrder);
             Thread.sleep(2000);
         }
     }

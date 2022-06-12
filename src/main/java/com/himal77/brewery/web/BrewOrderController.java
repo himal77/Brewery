@@ -1,29 +1,30 @@
 package com.himal77.brewery.web;
 
-import com.himal77.brewery.services.BrewService;
+import com.himal77.brewery.domain.BrewOrder;
+import com.himal77.brewery.services.BrewOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/brew")
+@RequestMapping("/breworders")
 @RestController
-public class BrewController {
+public class BrewOrderController {
 
-    private final BrewService breweryService;
+    private final BrewOrderService breweryService;
 
     @Autowired
-    public BrewController(BrewService breweryService) {
+    public BrewOrderController(BrewOrderService breweryService) {
         this.breweryService = breweryService;
     }
 
     @PostMapping
-    public ResponseEntity<Object> brew(@RequestParam String breweryId, @RequestParam String beerUpc, @RequestParam Integer quantity) {
-        breweryService.brew(breweryId, beerUpc, quantity);
+    public ResponseEntity<Object> brew(@RequestBody BrewOrder brewOrder) {
+        breweryService.brew(brewOrder);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @GetMapping("/getall")
+    @GetMapping
     public ResponseEntity<Object> findall() {
         return new ResponseEntity<>(breweryService.findAll(), HttpStatus.OK);
     }

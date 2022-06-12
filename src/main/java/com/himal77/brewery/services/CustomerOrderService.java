@@ -1,8 +1,6 @@
 package com.himal77.brewery.services;
 
-import com.himal77.brewery.domain.Brewery;
 import com.himal77.brewery.domain.Customer;
-import com.himal77.brewery.repositories.BreweryRepository;
 import com.himal77.brewery.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,11 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CustomerService {
+public class CustomerOrderService {
     private final CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerOrderService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
