@@ -12,12 +12,12 @@ import java.util.List;
 public class BrewOrderService {
 
     private final BeerService beerService;
-    private final BrewOrderRepository breweryRepository;
+    private final BrewOrderRepository brewOrderRepository;
     private final InventoryService inventoryService;
 
-    public BrewOrderService(BeerService beerService, BrewOrderRepository breweryRepository, InventoryService inventoryService) {
+    public BrewOrderService(BeerService beerService, BrewOrderRepository brewOrderRepository, InventoryService inventoryService) {
         this.beerService = beerService;
-        this.breweryRepository = breweryRepository;
+        this.brewOrderRepository = brewOrderRepository;
         this.inventoryService = inventoryService;
     }
 
@@ -33,7 +33,7 @@ public class BrewOrderService {
                 .beerUpc(brewOrder.getBeerUpc())
                 .quantity(brewOrder.getQuantity())
                 .build();
-        breweryRepository.save(brewed);
+        brewOrderRepository.save(brewed);
         inventoryService.addBeer(brewOrder.getBeerUpc(), brewOrder.getQuantity());
     }
 
@@ -42,6 +42,6 @@ public class BrewOrderService {
     }
 
     public List<BrewOrder> findAll() {
-        return breweryRepository.findAll();
+        return brewOrderRepository.findAll();
     }
 }

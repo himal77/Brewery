@@ -17,17 +17,17 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAllBrewery() {
+    public ResponseEntity<Object> getAll() {
         return new ResponseEntity<>(customerService.getAllCustomer(), HttpStatus.OK);
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Object> getBrewery(@PathVariable String customerId) {
+    public ResponseEntity<Object> getCustomer(@PathVariable String customerId) {
         return new ResponseEntity<>(customerService.getCustomer(customerId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Object> addBrewery(@RequestBody Customer customer) {
+    public ResponseEntity<Object> addCustomer(@RequestBody Customer customer) {
         return new ResponseEntity<>(customerService.save(customer), HttpStatus.OK);
     }
 }

@@ -24,13 +24,13 @@ public class InventoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addBeerToInventory(@RequestBody Inventory inventory) {
+    public ResponseEntity<Object> addBeer(@RequestBody Inventory inventory) {
         inventoryService.addBeer(inventory);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{beerUpc}")
-    public ResponseEntity<Object> removeBeerQuantityFromInventory(@PathVariable String beerUpc, @RequestParam(required = false) Integer quantity) {
+    public ResponseEntity<Object> removeBeerQuantity(@PathVariable String beerUpc, @RequestParam(required = false) Integer quantity) {
         if (quantity == 0) {
             inventoryService.removeBeer(beerUpc);
         } else {
