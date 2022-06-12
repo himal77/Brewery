@@ -1,31 +1,45 @@
 package com.himal77.brewery.services;
 
-import com.himal77.brewery.domain.Customer;
-import com.himal77.brewery.repositories.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.himal77.brewery.domain.CustomerOrder;
+import com.himal77.brewery.exception.BeerNotAvailableInInventoryException;
+import com.himal77.brewery.repositories.CustomerOrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerOrderService {
-    private final CustomerRepository customerRepository;
 
-    @Autowired
-    public CustomerOrderService(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+    private final CustomerOrderRepository customerOrderRepository;
+    private final InventoryService inventoryService;
+
+    public CustomerOrderService(CustomerOrderRepository customerOrderRepository, InventoryService inventoryService) {
+        this.customerOrderRepository = customerOrderRepository;
+        this.inventoryService = inventoryService;
     }
 
-    public List<Customer> getAllCustomer() {
-        return customerRepository.findAll();
+    public List<CustomerOrder> findAll() {
+        return customerOrderRepository.findAll();
     }
 
-    public Optional<Customer> getCustomer(String customerId) {
-        return customerRepository.findById(customerId);
+    public List<CustomerOrder> findOrderOfDate(Date date) {
+        return customerOrderRepository.findAllByDate(date);
     }
 
-    public Customer save(Customer customer) {
-        return customerRepository.save(customer);
+    public List<CustomerOrder> getCustomerSpecificOrder(String customerId) {
+        return customerOrderRepository.findAllByCustomerId(customerId);
+    }
+
+    public CustomerOrder placeOrder(CustomerOrder customerOrder) {
+        if (!inventoryService.isBeerAvailableInInventory(customerOrder.getBeerUpc(), customerOrder.getQuantity())) {
+            throw new BeerNotAvailableInInventoryException("Beer is not available in the inventory");
+        }
+        inventoryService.reduceBeerQuantityInInventory(customerOrder.getBeerUpc(), customerOrder.getQuantity());
+        if (customerOrder.getOrderId() == null) {
+            customerOrder.setOrderId(UUID.randomUUID());
+        }
+        return customerOrderRepository.save(customerOrder);
     }
 }

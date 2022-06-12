@@ -1,7 +1,7 @@
 package com.himal77.brewery.web;
 
 import com.himal77.brewery.domain.Customer;
-import com.himal77.brewery.services.CustomerOrderService;
+import com.himal77.brewery.services.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CustomerController {
 
-    private final CustomerOrderService customerService;
+    private final CustomerService customerService;
 
-    public CustomerController(CustomerOrderService customerService) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 

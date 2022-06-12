@@ -22,7 +22,7 @@ public class BrewOrderService {
     }
 
     public void brew(BrewOrder brewOrder) {
-        if(!isBeerAvailable(brewOrder.getBeerUpc())) {
+        if(!beerService.isBeerAvailable(brewOrder.getBeerUpc())) {
             throw new BeerNotFoundException();
         }
 
@@ -35,10 +35,6 @@ public class BrewOrderService {
                 .build();
         brewOrderRepository.save(brewed);
         inventoryService.addBeer(brewOrder.getBeerUpc(), brewOrder.getQuantity());
-    }
-
-    private boolean isBeerAvailable(String beerUpc) {
-        return beerService.findBeerByUpc(beerUpc) != null;
     }
 
     public List<BrewOrder> findAll() {

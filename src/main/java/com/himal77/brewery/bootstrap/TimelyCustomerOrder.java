@@ -1,7 +1,7 @@
 package com.himal77.brewery.bootstrap;
 
 import com.himal77.brewery.domain.CustomerOrder;
-import com.himal77.brewery.services.OrderService;
+import com.himal77.brewery.services.CustomerOrderService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +15,11 @@ import java.util.UUID;
 public class TimelyCustomerOrder implements CommandLineRunner {
 
     private Integer orderId = 0;
-    private OrderService orderService;
+    private CustomerOrderService customerOrderService;
     List<String> beerUpc;
 
-    public TimelyCustomerOrder(OrderService orderService ){
-        this.orderService =orderService;
+    public TimelyCustomerOrder(CustomerOrderService customerOrderService){
+        this.customerOrderService = customerOrderService;
         beerUpc = new ArrayList<String>();
     }
 
@@ -39,7 +39,7 @@ public class TimelyCustomerOrder implements CommandLineRunner {
                     .quantity(1)
                     .customerId(String.valueOf(orderId % 3))
                     .build();
-            orderService.placeOrder(customerOrder);
+            customerOrderService.placeOrder(customerOrder);
             Thread.sleep(10000);
         }
     }
