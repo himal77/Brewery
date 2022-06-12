@@ -30,7 +30,7 @@ public class InventoryController {
     }
 
     @DeleteMapping("/{beerUpc}")
-    public ResponseEntity<Object> removeBeerQuantityFromInventory(@PathVariable String beerUpc, @RequestParam Integer quantity) {
+    public ResponseEntity<Object> removeBeerQuantityFromInventory(@PathVariable String beerUpc, @RequestParam(required = false) Integer quantity) {
         if (quantity == 0) {
             inventoryService.removeBeer(beerUpc);
         } else {

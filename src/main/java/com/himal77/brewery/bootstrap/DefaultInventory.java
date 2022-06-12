@@ -11,6 +11,9 @@ public class DefaultInventory implements CommandLineRunner {
 
     private final InventoryRepository inventoryRepository;
 
+    public static final Integer DEFAULT_MAX = 100;
+    public static final Integer DEFAULT_MIN = 5;
+
     @Autowired
     public DefaultInventory(InventoryRepository InventoryRepository) {
         this.inventoryRepository = InventoryRepository;

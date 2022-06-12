@@ -1,5 +1,6 @@
 package com.himal77.brewery.services;
 
+import com.himal77.brewery.bootstrap.DefaultInventory;
 import com.himal77.brewery.domain.Beer;
 import com.himal77.brewery.domain.Inventory;
 import com.himal77.brewery.exception.BeerNotAvailableInInventoryException;
@@ -47,6 +48,8 @@ public class InventoryService {
                 .orElse(Inventory.builder()
                         .quantityOnHand(0)
                         .beerUpc(beerUpc)
+                        .maxOnHand(DefaultInventory.DEFAULT_MAX)
+                        .minOnHand(DefaultInventory.DEFAULT_MIN)
                         .build());
 
         if (inventory.getMaxOnHand() < (quantity + inventory.getQuantityOnHand())) {
