@@ -18,14 +18,14 @@ public class BrewOrderController {
         this.breweryService = breweryService;
     }
 
+    @GetMapping
+    public ResponseEntity<Object> findall() {
+        return new ResponseEntity<>(breweryService.findAll(), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Object> brew(@RequestBody BrewOrder brewOrder) {
         breweryService.brew(brewOrder);
         return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<Object> findall() {
-        return new ResponseEntity<>(breweryService.findAll(), HttpStatus.OK);
     }
 }

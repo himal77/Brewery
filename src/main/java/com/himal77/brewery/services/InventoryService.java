@@ -32,6 +32,13 @@ public class InventoryService {
         return inventoryRepository.findAll();
     }
 
+    public void addBeer(Inventory inventory) {
+        if (!beerService.isBeerAvailable(inventory.getBeerUpc())) {
+            throw new BeerNotFoundException();
+        }
+        inventoryRepository.save(inventory);
+    }
+
     public void addBeer(String beerUpc, Integer quantity) {
         if (!beerService.isBeerAvailable(beerUpc)) {
             throw new BeerNotFoundException();

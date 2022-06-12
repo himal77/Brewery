@@ -36,11 +36,11 @@ public class TimelyCustomerOrder implements CommandLineRunner {
                     .date(new Date(System.currentTimeMillis()))
                     .time(new Time(System.currentTimeMillis()))
                     .beerUpc(beerUpc.get(orderId % beerUpc.size()))
-                    .quantity(orderId)
+                    .quantity(1)
                     .customerId(String.valueOf(orderId % 3))
                     .build();
             orderService.placeOrder(customerOrder);
-            Thread.sleep(2000);
+            Thread.sleep(10000);
         }
     }
 }

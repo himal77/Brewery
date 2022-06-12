@@ -1,5 +1,6 @@
 package com.himal77.brewery.web;
 
+import com.himal77.brewery.domain.Inventory;
 import com.himal77.brewery.services.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,8 @@ public class InventoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addBeerToInventory(@RequestParam String beerUpc, @RequestParam Integer quantity) {
-        inventoryService.addBeer(beerUpc, quantity);
+    public ResponseEntity<Object> addBeerToInventory(@RequestBody Inventory inventory) {
+        inventoryService.addBeer(inventory);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

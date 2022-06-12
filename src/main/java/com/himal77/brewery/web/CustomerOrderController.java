@@ -19,22 +19,17 @@ public class CustomerOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAllOrder() {
-        return new ResponseEntity<>(orderService.findAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/date")
-    public ResponseEntity<Object> findAllOrderFromToday(@RequestParam Date date) {
+    public ResponseEntity<Object> findAllOrder(@RequestParam(required = false) Date date, @RequestParam(required = false) String customerId) {
+        if(date == null) {
+            return new ResponseEntity<>(orderService.findAll(), HttpStatus.OK);
+        } else if(customerId != null) {
+            return new ResponseEntity<>(orderService.getCustomerSpecificOrder(customerId), HttpStatus.OK);
+        }
         return new ResponseEntity<>(orderService.findOrderOfDate(date), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Object> placeOrder(@RequestBody CustomerOrder customerOrder) {
         return new ResponseEntity<>(orderService.placeOrder(customerOrder), HttpStatus.OK);
-    }
-
-    @GetMapping("/customer")
-    public ResponseEntity<Object> getMyOrders(@RequestParam String customerId) {
-        return new ResponseEntity<>(orderService.getCustomerSpecificOrder(customerId), HttpStatus.OK);
     }
 }
