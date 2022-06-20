@@ -25,7 +25,6 @@ public class BrewOrderController {
 
     @PostMapping
     public ResponseEntity<Object> brew(@RequestBody BrewOrder brewOrder) {
-        breweryService.brew(brewOrder);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(breweryService.brew(brewOrder), HttpStatus.OK);
     }
 }

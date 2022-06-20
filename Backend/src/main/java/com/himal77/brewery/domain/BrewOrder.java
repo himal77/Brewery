@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.sql.Timestamp;
 
 @Entity
 @Builder
@@ -18,5 +17,5 @@ public class BrewOrder {
     private String breweryId;
     private String beerUpc;
     private Integer quantity;
-    private Timestamp brewedDate;
+    private long brewedDateInMilliSec;
 }

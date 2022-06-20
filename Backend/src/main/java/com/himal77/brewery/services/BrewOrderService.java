@@ -5,7 +5,6 @@ import com.himal77.brewery.exception.BeerNotFoundException;
 import com.himal77.brewery.repositories.BrewOrderRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -21,7 +20,7 @@ public class BrewOrderService {
         this.inventoryService = inventoryService;
     }
 
-    public void brew(BrewOrder brewOrder) {
+    public BrewOrder brew(BrewOrder brewOrder) {
         if(!beerService.isBeerAvailable(brewOrder.getBeerUpc())) {
             throw new BeerNotFoundException();
         }
@@ -29,12 +28,13 @@ public class BrewOrderService {
         BrewOrder brewed = BrewOrder.builder()
                 .brewId(brewOrder.getBrewId())
                 .breweryId(brewOrder.getBreweryId())
-                .brewedDate(new Timestamp(System.currentTimeMillis()))
+                .brewedDateInMilliSec(System.currentTimeMillis())
                 .beerUpc(brewOrder.getBeerUpc())
                 .quantity(brewOrder.getQuantity())
                 .build();
-        brewOrderRepository.save(brewed);
+        BrewOrder savedBrewOrder = brewOrderRepository.save(brewed);
         inventoryService.addBeer(brewOrder.getBeerUpc(), brewOrder.getQuantity());
+        return savedBrewOrder;
     }
 
     public List<BrewOrder> findAll() {
