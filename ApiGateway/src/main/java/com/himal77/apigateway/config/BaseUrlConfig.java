@@ -15,4 +15,5 @@ import org.springframework.context.annotation.Configuration;
 @NoArgsConstructor
 public class BaseUrlConfig {
     public String beerurl;
+    public String breweryurl;
 }
