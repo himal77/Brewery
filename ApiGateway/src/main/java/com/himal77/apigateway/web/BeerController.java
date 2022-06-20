@@ -5,12 +5,11 @@ import com.himal77.apigateway.domain.Beer;
 import com.himal77.apigateway.domain.BeerStyleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -32,8 +31,27 @@ public class BeerController {
 
     @GetMapping
     public ResponseEntity<Object> findAll(@RequestParam(required = false) String beerUpc) throws URISyntaxException {
+
         URI uri = new URI(baseUrlConfig.getBeerurl());
+        if (beerUpc != null) {
+            uri = new URI(baseUrlConfig.getBeerurl() + "?beerUpc=" + beerUpc);
+        }
         ResponseEntity<Object> response = restTemplate.getForEntity(uri, Object.class);
-        return new ResponseEntity<Object>(response.getBody(), response.getStatusCode());
+        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> addBeer(@RequestBody Beer beer) throws URISyntaxException {
+        URI uri = new URI(baseUrlConfig.getBeerurl());
+        ResponseEntity<Object> response = restTemplate.postForEntity(uri, beer, Object.class);
+        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+    }
+
+    @PutMapping("/{beerUpc}")
+    public ResponseEntity<Object> updateBeer(@RequestBody Beer beer, @PathVariable String beerUpc) throws URISyntaxException {
+        URI uri = new URI(baseUrlConfig.getBeerurl() + "/" + beerUpc);
+        HttpEntity<Beer> entity = new HttpEntity<>(beer);
+        ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.PUT, entity, Object.class);
+        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 }
