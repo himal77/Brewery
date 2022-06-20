@@ -17,4 +17,6 @@ public class BaseUrlConfig {
     public String beerurl;
     public String breweryurl;
     public String breworderurl;
+    public String customerurl;
+
 }
