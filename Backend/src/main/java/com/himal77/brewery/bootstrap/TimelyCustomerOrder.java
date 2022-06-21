@@ -28,7 +28,7 @@ public class TimelyCustomerOrder implements CommandLineRunner {
         beerUpc.add(DefaultBeer.BEER_1_UPC);
         beerUpc.add(DefaultBeer.BEER_2_UPC);
         beerUpc.add(DefaultBeer.BEER_3_UPC);
-
+/*
            while(true) {
             orderId++;
             CustomerOrder customerOrder = CustomerOrder.builder()
@@ -42,5 +42,6 @@ public class TimelyCustomerOrder implements CommandLineRunner {
             customerOrderService.placeOrder(customerOrder);
             Thread.sleep(10000);
         }
+ */
     }
 }

@@ -3,6 +3,7 @@ package com.himal77.brewery.services;
 import com.himal77.brewery.domain.Beer;
 import com.himal77.brewery.repositories.BeerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class BeerService {
         return beerRepository.save(beer);
     }
 
+    @Transactional
     public void deleteBeer(String beerUpc) {
         beerRepository.deleteBeerByBeerUpc(beerUpc);
     }
