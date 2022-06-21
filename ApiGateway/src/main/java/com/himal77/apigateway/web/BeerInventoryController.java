@@ -1,8 +1,11 @@
 package com.himal77.apigateway.web;
 
 import com.himal77.apigateway.config.BaseUrlConfig;
-import com.himal77.apigateway.domain.Inventory;
+import com.himal77.apigateway.domain.BeerInventory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -10,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-@RequestMapping("/inventory")
+@RequestMapping("/beerinventories")
 @RestController
 public class BeerInventoryController {
 
@@ -24,31 +27,39 @@ public class BeerInventoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAll(@RequestParam(required = false) String resolve) throws URISyntaxException {
+    public ResponseEntity<Object> findAllBeerInventory() throws URISyntaxException {
         URI uri = new URI(baseUrlConfig.getBeerinventoryurl());
-        if (resolve != null) {
-            uri = new URI(baseUrlConfig.getBeerinventoryurl() + "?resolve=" + resolve);
-        }
         ResponseEntity<Object> response = restTemplate.getForEntity(uri, Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 
     @PostMapping
-    public ResponseEntity<Object> addBeer(@RequestBody Inventory inventory) throws URISyntaxException {
+    public ResponseEntity<Object> saveBeerInventory(@RequestBody BeerInventory beerInventory) throws URISyntaxException {
         URI uri = new URI(baseUrlConfig.getBeerinventoryurl());
-        ResponseEntity<Object> response = restTemplate.postForEntity(uri, inventory, Object.class);
+        ResponseEntity<Object> response = restTemplate.postForEntity(uri, beerInventory, Object.class);
+        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+    }
+
+    @PutMapping("/increaseQuantity/{beerUpc}")
+    public ResponseEntity<Object> increaseBeerQuantityInInventory(@PathVariable String beerUpc, @RequestParam Integer quantity) throws URISyntaxException {
+        URI uri = new URI(baseUrlConfig.getBeerinventoryurl() + "/increaseQuantity/" + beerUpc + "?quantity=" + quantity);
+        HttpEntity<String> entity = new HttpEntity<>("");
+        ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.PUT, entity, Object.class);
+        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+    }
+
+    @PutMapping("/decreaseQuantity/{beerUpc}")
+    public ResponseEntity<Object> decreaseBeerQuantityInInventory(@PathVariable String beerUpc, @RequestParam Integer quantity) throws URISyntaxException {
+        URI uri = new URI(baseUrlConfig.getBeerinventoryurl() + "/decreaseQuantity/" + beerUpc + "?quantity=" + quantity);
+        HttpEntity<String> entity = new HttpEntity<>("");
+        ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.PUT, entity, Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 
     @DeleteMapping("/{beerUpc}")
-    public ResponseEntity<Object> removeBeerQuantity(@PathVariable String beerUpc, @RequestParam(required = false) Integer quantity) throws URISyntaxException {
-        URI uri;
-        if (quantity == 0) {
-            uri = new URI(baseUrlConfig.getBeerinventoryurl() + "?beerUpc=" + beerUpc);
-        } else {
-            uri = new URI(baseUrlConfig.getBeerinventoryurl() + "?beerUpc=" + beerUpc + "&quantity=" + quantity);
-        }
-        ResponseEntity<Object> response = restTemplate.getForEntity(uri, Object.class);
-        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+    public ResponseEntity<Object> removeBeerFromInventory(@PathVariable String beerUpc) throws URISyntaxException {
+        URI uri = new URI(baseUrlConfig.getBeerinventoryurl() + "/" + beerUpc);
+        restTemplate.delete(uri);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

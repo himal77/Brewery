@@ -19,14 +19,13 @@ public class BeerInventoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAllBeerInventory(@RequestParam(required = false) String resolve) {
+    public ResponseEntity<Object> findAllBeerInventory() {
         return new ResponseEntity<>(beerInventoryService.findAllInventory(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Object> saveBeerInventory(@RequestBody BeerInventory beerInventory) {
-        beerInventoryService.saveBeerInventory(beerInventory);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(beerInventoryService.saveBeerInventory(beerInventory), HttpStatus.OK);
     }
 
     @PutMapping("/increaseQuantity/{beerUpc}")

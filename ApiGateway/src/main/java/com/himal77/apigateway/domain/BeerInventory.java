@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @Builder
-public class Inventory {
+public class BeerInventory {
 
     private String beerUpc;
     private Integer quantityOnHand;

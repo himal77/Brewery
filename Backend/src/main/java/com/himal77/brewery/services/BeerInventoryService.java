@@ -25,14 +25,14 @@ public class BeerInventoryService {
         return beerInventoryRepository.findAll();
     }
 
-    public void saveBeerInventory(BeerInventory beerInventory) {
+    public BeerInventory saveBeerInventory(BeerInventory beerInventory) {
         if (!beerService.isBeerAvailable(beerInventory.getBeerUpc())) {
             throw new BeerNotFoundException();
         }
-        beerInventoryRepository.save(beerInventory);
+        return beerInventoryRepository.save(beerInventory);
     }
 
-    public void saveBeerInventory(String beerUpc, Integer quantity) {
+    public BeerInventory saveBeerInventory(String beerUpc, Integer quantity) {
         if (!beerService.isBeerAvailable(beerUpc)) {
             throw new BeerNotFoundException();
         }
@@ -43,7 +43,7 @@ public class BeerInventoryService {
                         .maxOnHand(DefaultInventory.DEFAULT_MAX)
                         .minOnHand(DefaultInventory.DEFAULT_MIN)
                         .build());
-        beerInventoryRepository.save(beerInventory);
+        return beerInventoryRepository.save(beerInventory);
     }
 
     public boolean isBeerAvailableInInventory(String beerUpc, Integer quantity) {
@@ -52,6 +52,16 @@ public class BeerInventoryService {
             return false;
         }
         return beerInventory.getQuantityOnHand() > quantity;
+    }
+
+    public BeerInventory increaseBeerQuantityInInventory(String beerUpc, Integer quantity) {
+        BeerInventory beerInventory = beerInventoryRepository.findById(beerUpc).orElse(null);
+        if (beerInventory != null) {
+            beerInventory.setQuantityOnHand(beerInventory.getQuantityOnHand() + quantity);
+        } else {
+            beerInventory = saveBeerInventory(beerUpc, quantity);
+        }
+        return beerInventoryRepository.save(beerInventory);
     }
 
     public BeerInventory decreaseBeerQuantityInInventory(String beerUpc, Integer quantity) {
@@ -63,19 +73,7 @@ public class BeerInventoryService {
         if (beerInventory != null) {
             beerInventory.setQuantityOnHand(beerInventory.getQuantityOnHand() - quantity);
         }
-        return beerInventory;
-    }
-
-    public BeerInventory increaseBeerQuantityInInventory(String beerUpc, Integer quantity) {
-        if (!isBeerAvailableInInventory(beerUpc, quantity)) {
-            throw new BeerNotAvailableInInventoryException("Beer Not Available in the inventory");
-        }
-        BeerInventory beerInventory = beerInventoryRepository.findById(beerUpc).orElse(null);
-
-        if (beerInventory != null) {
-            beerInventory.setQuantityOnHand(beerInventory.getQuantityOnHand() + quantity);
-        }
-        return beerInventory;
+        return beerInventoryRepository.save(beerInventory);
     }
 
     public void removeBeerFromInventory(String beerUpc) {
