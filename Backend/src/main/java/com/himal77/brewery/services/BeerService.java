@@ -37,6 +37,6 @@ public class BeerService {
     }
 
     public void deleteBeer(String beerUpc) {
-        beerRepository.deleteById(beerUpc);
+        beerRepository.deleteBeerByBeerUpc(beerUpc);
     }
 }

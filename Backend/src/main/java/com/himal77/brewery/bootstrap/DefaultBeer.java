@@ -24,21 +24,21 @@ public class DefaultBeer implements CommandLineRunner {
 
     public void run(String... args) {
         Beer mangoBobs = Beer.builder()
-                .upc(BEER_1_UPC)
+                .beerUpc(BEER_1_UPC)
                 .beerName("Mango Bobs")
                 .beerStyle(BeerStyleEnum.IPA)
                 .price(BigDecimal.valueOf(12.23))
                 .build();
 
         Beer galaxyCat = Beer.builder()
-                .upc(BEER_2_UPC)
+                .beerUpc(BEER_2_UPC)
                 .beerName("Galaxy Cat")
                 .beerStyle(BeerStyleEnum.PALE_ALE)
                 .price(BigDecimal.valueOf(11.13))
                 .build();
 
         Beer pinball = Beer.builder()
-                .upc(BEER_3_UPC)
+                .beerUpc(BEER_3_UPC)
                 .beerName("Pinball Porter")
                 .beerStyle(BeerStyleEnum.PORTER)
                 .price(BigDecimal.valueOf(12.23))

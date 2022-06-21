@@ -19,17 +19,15 @@ public class CustomerOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAllCustomerOrder() {
+    public ResponseEntity<Object> findAllCustomerOrder(@RequestParam Date date) {
+        if (date != null) {
+            return new ResponseEntity<>(customerOrderService.findCustomerOrderByDate(date), HttpStatus.OK);
+        }
         return new ResponseEntity<>(customerOrderService.findAllCustomerOrder(), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<Object> findAllCustomerOrderByDate(@RequestParam Date date) {
-        return new ResponseEntity<>(customerOrderService.findCustomerOrderByDate(date), HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<Object> findAllCustomerOrderByDate(@RequestParam String customerId) {
+    @GetMapping("/{customerId}")
+    public ResponseEntity<Object> findAllCustomerOrderByCustomerId(@PathVariable String customerId) {
         return new ResponseEntity<>(customerOrderService.findAllCustomerOrderByCustomerId(customerId), HttpStatus.OK);
     }
 

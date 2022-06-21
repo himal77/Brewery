@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BeerRepository extends JpaRepository<Beer, String> {
     Beer findByBeerUpc(String beerUpc);
+    void deleteBeerByBeerUpc(String beerUpc);
 }
