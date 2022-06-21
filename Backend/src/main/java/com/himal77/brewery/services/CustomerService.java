@@ -17,15 +17,24 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public List<Customer> getAllCustomer() {
+    public List<Customer> findAllCustomer() {
         return customerRepository.findAll();
     }
 
-    public Optional<Customer> getCustomer(String customerId) {
+    public Optional<Customer> findAllCustomerByCustomerId(String customerId) {
         return customerRepository.findById(customerId);
     }
 
-    public Customer save(Customer customer) {
+    public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
+    }
+
+    public Customer updateCustomer(Customer customer, String customerId) {
+        customer.setCustomerId(customerId);
+        return customerRepository.save(customer);
+    }
+
+    public void deleteCustomer(String customerId) {
+        customerRepository.deleteById(customerId);
     }
 }

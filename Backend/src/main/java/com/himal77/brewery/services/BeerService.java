@@ -15,26 +15,28 @@ public class BeerService {
         this.beerRepository = beerRepository;
     }
 
-    public List<Beer> findAll() {
+    public List<Beer> findAllBeer() {
         return beerRepository.findAll();
     }
-    public Beer findBeerByUpc(String upc) {
-        return beerRepository.findByUpc(upc);
+
+    public Beer findByBeerUpc(String upc) {
+        return beerRepository.findByBeerUpc(upc);
     }
 
     public boolean isBeerAvailable(String beerUpc) {
-        return findBeerByUpc(beerUpc) != null;
+        return findByBeerUpc(beerUpc) != null;
     }
 
-    public Beer save(Beer beer) {
+    public Beer saveBeer(Beer beer) {
         return beerRepository.save(beer);
     }
 
-    public Beer update(Beer beer, String beerUpc) {
-        Beer repoBeer = beerRepository.findByUpc(beerUpc);
-        repoBeer.setBeerName(beer.getBeerName());
-        repoBeer.setPrice(beer.getPrice());
-        repoBeer.setBeerStyle(beer.getBeerStyle());
-        return beerRepository.save(repoBeer);
+    public Beer updateBeer(Beer beer, String beerUpc) {
+        beer.setBeerUpc(beerUpc);
+        return beerRepository.save(beer);
+    }
+
+    public void deleteBeer(String beerUpc) {
+        beerRepository.deleteById(beerUpc);
     }
 }

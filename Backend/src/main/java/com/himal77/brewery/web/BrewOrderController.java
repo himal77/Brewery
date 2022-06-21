@@ -19,12 +19,12 @@ public class BrewOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findall() {
-        return new ResponseEntity<>(breweryService.findAll(), HttpStatus.OK);
+    public ResponseEntity<Object> findAllBrewOrder() {
+        return new ResponseEntity<>(breweryService.findAllBrewOrder(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Object> brew(@RequestBody BrewOrder brewOrder) {
-        return new ResponseEntity<>(breweryService.brew(brewOrder), HttpStatus.OK);
+    public ResponseEntity<Object> saveBrewOrder(@RequestBody BrewOrder brewOrder) {
+        return new ResponseEntity<>(breweryService.saveBrewOrder(brewOrder), HttpStatus.OK);
     }
 }

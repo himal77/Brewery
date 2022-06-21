@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class Beer{
 
     @Id
-    private String upc;
+    private String beerUpc;
     private String beerName;
     private BeerStyleEnum beerStyle;
     private BigDecimal price;
@@ -23,7 +23,7 @@ public class Beer{
     @Override
     public String toString() {
         return "{" +
-                "upc:'" + upc + '\'' +
+                "upc:'" + beerUpc + '\'' +
                 ", beerName:'" + beerName + '\'' +
                 ", beerStyle:" + beerStyle +
                 ", price:" + price +

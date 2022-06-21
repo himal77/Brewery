@@ -13,30 +13,30 @@ import java.util.UUID;
 public class CustomerOrderService {
 
     private final CustomerOrderRepository customerOrderRepository;
-    private final InventoryService inventoryService;
+    private final BeerInventoryService beerInventoryService;
 
-    public CustomerOrderService(CustomerOrderRepository customerOrderRepository, InventoryService inventoryService) {
+    public CustomerOrderService(CustomerOrderRepository customerOrderRepository, BeerInventoryService beerInventoryService) {
         this.customerOrderRepository = customerOrderRepository;
-        this.inventoryService = inventoryService;
+        this.beerInventoryService = beerInventoryService;
     }
 
-    public List<CustomerOrder> findAll() {
+    public List<CustomerOrder> findAllCustomerOrder() {
         return customerOrderRepository.findAll();
     }
 
-    public List<CustomerOrder> findOrderOfDate(Date date) {
+    public List<CustomerOrder> findCustomerOrderByDate(Date date) {
         return customerOrderRepository.findAllByDate(date);
     }
 
-    public List<CustomerOrder> getCustomerSpecificOrder(String customerId) {
+    public List<CustomerOrder> findAllCustomerOrderByCustomerId(String customerId) {
         return customerOrderRepository.findAllByCustomerId(customerId);
     }
 
     public CustomerOrder placeOrder(CustomerOrder customerOrder) {
-        if (!inventoryService.isBeerAvailableInInventory(customerOrder.getBeerUpc(), customerOrder.getQuantity())) {
+        if (!beerInventoryService.isBeerAvailableInInventory(customerOrder.getBeerUpc(), customerOrder.getQuantity())) {
             throw new BeerNotAvailableInInventoryException("Beer is not available in the inventory");
         }
-        inventoryService.reduceBeerQuantityInInventory(customerOrder.getBeerUpc(), customerOrder.getQuantity());
+        beerInventoryService.decreaseBeerQuantityInInventory(customerOrder.getBeerUpc(), customerOrder.getQuantity());
         if (customerOrder.getOrderId() == null) {
             customerOrder.setOrderId(UUID.randomUUID());
         }

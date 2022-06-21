@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BreweryRepository extends JpaRepository<Brewery, String> {
+    public Brewery findBreweryByBreweryId(String breweryId);
 }

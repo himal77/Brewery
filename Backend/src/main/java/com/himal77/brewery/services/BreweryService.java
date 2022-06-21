@@ -1,5 +1,6 @@
 package com.himal77.brewery.services;
 
+import com.himal77.brewery.domain.Beer;
 import com.himal77.brewery.domain.Brewery;
 import com.himal77.brewery.repositories.BreweryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,24 @@ public class BreweryService {
         this.breweryRepository = breweryRepository;
     }
 
-    public List<Brewery> getAllBrewery() {
+    public List<Brewery> findAllBrewery() {
         return breweryRepository.findAll();
     }
 
-    public Optional<Brewery> getBrewery(String breweryId) {
+    public Optional<Brewery> findBreweryByBreweryId(String breweryId) {
         return breweryRepository.findById(breweryId);
     }
 
-    public Brewery save(Brewery brewery) {
+    public Brewery saveBrewery(Brewery brewery) {
         return breweryRepository.save(brewery);
+    }
+
+    public Brewery updateBrewery(Brewery brewery, String breweryId) {
+        brewery.setBreweryId(breweryId);
+        return breweryRepository.save(brewery);
+    }
+
+    public void deleteBrewery(String breweryId) {
+        breweryRepository.deleteById(breweryId);
     }
 }

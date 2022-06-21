@@ -12,15 +12,15 @@ public class BrewOrderService {
 
     private final BeerService beerService;
     private final BrewOrderRepository brewOrderRepository;
-    private final InventoryService inventoryService;
+    private final BeerInventoryService beerInventoryService;
 
-    public BrewOrderService(BeerService beerService, BrewOrderRepository brewOrderRepository, InventoryService inventoryService) {
+    public BrewOrderService(BeerService beerService, BrewOrderRepository brewOrderRepository, BeerInventoryService beerInventoryService) {
         this.beerService = beerService;
         this.brewOrderRepository = brewOrderRepository;
-        this.inventoryService = inventoryService;
+        this.beerInventoryService = beerInventoryService;
     }
 
-    public BrewOrder brew(BrewOrder brewOrder) {
+    public BrewOrder saveBrewOrder(BrewOrder brewOrder) {
         if(!beerService.isBeerAvailable(brewOrder.getBeerUpc())) {
             throw new BeerNotFoundException();
         }
@@ -33,11 +33,11 @@ public class BrewOrderService {
                 .quantity(brewOrder.getQuantity())
                 .build();
         BrewOrder savedBrewOrder = brewOrderRepository.save(brewed);
-        inventoryService.addBeer(brewOrder.getBeerUpc(), brewOrder.getQuantity());
+        beerInventoryService.saveBeerInventory(brewOrder.getBeerUpc(), brewOrder.getQuantity());
         return savedBrewOrder;
     }
 
-    public List<BrewOrder> findAll() {
+    public List<BrewOrder> findAllBrewOrder() {
         return brewOrderRepository.findAll();
     }
 }

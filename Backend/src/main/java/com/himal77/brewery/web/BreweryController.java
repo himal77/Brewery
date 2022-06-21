@@ -17,15 +17,28 @@ public class BreweryController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getBrewery(@RequestParam(required = false) String breweryId) {
-        if (breweryId != null) {
-            return new ResponseEntity<>(breweryService.getBrewery(breweryId), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(breweryService.getAllBrewery(), HttpStatus.OK);
+    public ResponseEntity<Object> findAllBrewery() {
+        return new ResponseEntity<>(breweryService.findAllBrewery(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{breweryId}")
+    public ResponseEntity<Object> findBreweryByBreweryId(@PathVariable String breweryId) {
+        return new ResponseEntity<>(breweryService.findBreweryByBreweryId(breweryId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Object> addBrewery(@RequestBody Brewery brewery) {
-        return new ResponseEntity<>(breweryService.save(brewery), HttpStatus.OK);
+    public ResponseEntity<Object> saveBrewery(@RequestBody Brewery brewery) {
+        return new ResponseEntity<>(breweryService.saveBrewery(brewery), HttpStatus.OK);
+    }
+
+    @PutMapping("/{breweryId}")
+    public ResponseEntity<Object> updateBrewery(@RequestBody Brewery brewery, @PathVariable String breweryId) {
+        return new ResponseEntity<>(breweryService.updateBrewery(brewery, breweryId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{breweryId}")
+    public ResponseEntity<Object> deleteBrewery(@PathVariable String breweryId) {
+        breweryService.deleteBrewery(breweryId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

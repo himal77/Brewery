@@ -19,20 +19,28 @@ public class BeerController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAll(@RequestParam(required = false) String beerUpc) {
-        if (beerUpc != null) {
-            return new ResponseEntity<>(beerService.findBeerByUpc(beerUpc), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(beerService.findAll(), HttpStatus.OK);
+    public ResponseEntity<Object> findAllBeer() {
+        return new ResponseEntity<>(beerService.findAllBeer(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{beerUpc}")
+    public ResponseEntity<Object> findByBeerUpc(@PathVariable String beerUpc) {
+        return new ResponseEntity<>(beerService.findByBeerUpc(beerUpc), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Object> addBeer(@RequestBody Beer beer) {
-        return new ResponseEntity<>(beerService.save(beer), HttpStatus.OK);
+    public ResponseEntity<Object> saveBeer(@RequestBody Beer beer) {
+        return new ResponseEntity<>(beerService.saveBeer(beer), HttpStatus.OK);
     }
 
     @PutMapping("/{beerUpc}")
     public ResponseEntity<Object> updateBeer(@RequestBody Beer beer, @PathVariable String beerUpc) {
-        return new ResponseEntity<>(beerService.update(beer, beerUpc), HttpStatus.OK);
+        return new ResponseEntity<>(beerService.updateBeer(beer, beerUpc), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{beerUpc}")
+    public ResponseEntity<Object> deleteBeer(@PathVariable String beerUpc) {
+        beerService.deleteBeer(beerUpc);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

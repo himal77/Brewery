@@ -17,17 +17,28 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAll() {
-        return new ResponseEntity<>(customerService.getAllCustomer(), HttpStatus.OK);
+    public ResponseEntity<Object> findAllCustomer() {
+        return new ResponseEntity<>(customerService.findAllCustomer(), HttpStatus.OK);
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Object> getCustomer(@PathVariable String customerId) {
-        return new ResponseEntity<>(customerService.getCustomer(customerId), HttpStatus.OK);
+    public ResponseEntity<Object> findCustomerByCustomerId(@PathVariable String customerId) {
+        return new ResponseEntity<>(customerService.findAllCustomerByCustomerId(customerId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Object> addCustomer(@RequestBody Customer customer) {
-        return new ResponseEntity<>(customerService.save(customer), HttpStatus.OK);
+    public ResponseEntity<Object> saveCustomer(@RequestBody Customer customer) {
+        return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.OK);
+    }
+
+    @PutMapping("/{customerId}")
+    public ResponseEntity<Object> saveCustomer(@RequestBody Customer customer, @PathVariable String customerId ) {
+        return new ResponseEntity<>(customerService.updateCustomer(customer, customerId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<Object> saveCustomer( @PathVariable String customerId ) {
+        customerService.deleteCustomer(customerId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

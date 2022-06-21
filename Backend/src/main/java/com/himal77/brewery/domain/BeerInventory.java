@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @Getter
 @AllArgsConstructor
 @Builder
-public class Inventory {
+public class BeerInventory {
     @Id
     private String beerUpc;
     private Integer quantityOnHand;
