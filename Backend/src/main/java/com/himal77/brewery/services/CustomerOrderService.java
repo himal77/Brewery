@@ -6,6 +6,7 @@ import com.himal77.brewery.repositories.CustomerOrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +41,8 @@ public class CustomerOrderService {
         if (customerOrder.getOrderId() == null) {
             customerOrder.setOrderId(UUID.randomUUID());
         }
+        customerOrder.setDate(new Date(System.currentTimeMillis()));
+        customerOrder.setTime(new Time(System.currentTimeMillis()));
         return customerOrderRepository.save(customerOrder);
     }
 }

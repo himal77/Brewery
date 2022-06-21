@@ -25,13 +25,20 @@ public class CustomerOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAllOrder(@RequestParam(required = false) Date date,
-                                               @RequestParam(required = false) String customerId) throws URISyntaxException {
+    public ResponseEntity<Object> findAllCustomerOrder(@RequestParam(required = false) Date date) throws URISyntaxException {
         URI uri = new URI(baseUrlConfig.getCustomerorderurl());
         if (date != null) {
             uri = new URI(baseUrlConfig.getCustomerorderurl() + "?date=" + date);
-        } else if (customerId != null) {
-            uri = new URI(baseUrlConfig.getCustomerorderurl() + "?customerId=" + customerId);
+        }
+        ResponseEntity<Object> response = restTemplate.getForEntity(uri, Object.class);
+        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+    }
+
+    @GetMapping("/{customerId}")
+    public ResponseEntity<Object> findAllCustomerOrderByCustomerId(@PathVariable String customerId) throws URISyntaxException {
+        URI uri = new URI(baseUrlConfig.getCustomerorderurl());
+        if (customerId != null) {
+            uri = new URI(baseUrlConfig.getCustomerorderurl() + "/" + customerId);
         }
         ResponseEntity<Object> response = restTemplate.getForEntity(uri, Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());

@@ -4,6 +4,7 @@ import com.himal77.brewery.domain.Customer;
 import com.himal77.brewery.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+    @Transactional
     public void deleteCustomer(String customerId) {
         customerRepository.deleteById(customerId);
     }

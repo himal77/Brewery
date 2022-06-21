@@ -19,7 +19,7 @@ public class CustomerOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAllCustomerOrder(@RequestParam Date date) {
+    public ResponseEntity<Object> findAllCustomerOrder(@RequestParam(required = false) Date date) {
         if (date != null) {
             return new ResponseEntity<>(customerOrderService.findCustomerOrderByDate(date), HttpStatus.OK);
         }
