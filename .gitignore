@@ -86,3 +86,12 @@ Desktop.ini
 
 # brewery specific
 MonolithNServerless/MnS_BreweryBackend/src/main/resources/.env
+Monolith/M_BreweryApiGateway/target/
+Monolith/M_BreweryBackend/target/
+MonolithNServerless/MnS_BreweryApiGateway/target/
+MonolithNServerless/MnS_BreweryBackend/target/
+MonolithNServerless/Serverless/BeerInventory/GetBeerInInventory/psycopg2
+MonolithNServerless/Serverless/BeerInventory/GetBeerInInventory/psycopg2_binary-2.9.3.dist-info
+MonolithNServerless/Serverless/BeerInventory/GetBeerInInventory/psycopg2_binary.libs
+MonolithNServerless/Serverless/BeerInventory/GetBeerInInventory/env
+
