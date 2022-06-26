@@ -3,11 +3,12 @@
 if [ $1 == "deploy" ]
 then
     # make a zip of source file and its dependency
-    cd BeerInventory/GetBeerInInventory
+    cd BeerInventory/GetBeerInventory
     zip -r GetBeerInventory.zip *
 
     # come back to serverless root folder
-    cd -
+    cd ..
+    cd ..
 
     # create s3 bucket to deploy the code
     aws s3 mb s3://himalpuri
@@ -20,7 +21,8 @@ then
     rm GetBeerInventory.zip
 
     # come back to serverless root folder
-    cd -
+    cd ..
+    cd ..
 
 elif [ $1 == "clean" ]
 then
