@@ -11,8 +11,8 @@ Resources:
   BeerAvailableFn:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: BeerInventory/GetBeerInInventory.zip
-      Handler: GetBeerInInventory.handler
+      CodeUri: BeerInventory/GetBeerInventory/GetBeerInventory.zip
+      Handler: GetBeerInventory.handler
       Runtime: python3.6
       Events:
         ApiEvents:
