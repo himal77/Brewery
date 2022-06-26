@@ -83,3 +83,6 @@ Desktop.ini
 .eslintcache
 /.idea/
 /target/*
+
+# brewery specific
+MonolithNServerless/MnS_BreweryBackend/src/main/resources/.env

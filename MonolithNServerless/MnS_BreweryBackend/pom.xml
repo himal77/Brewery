@@ -16,6 +16,7 @@
 		<lombok.version>1.18.24</lombok.version>
 		<h2.version>2.1.212</h2.version>
 		<jackson.version>2.13.3</jackson.version>
+		<postgres.version>42.4.0</postgres.version>
 	</properties>
 
 	<dependencies>
@@ -28,6 +29,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgres.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
