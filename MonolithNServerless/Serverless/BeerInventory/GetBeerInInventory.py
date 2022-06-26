@@ -14,14 +14,16 @@ connection = psycopg2.connect(
     password = password
 )
 
-def lambda_handler():
+def handler(event, context):
     cursor = connection.cursor()
     cursor.execute("select * from beer")
 
     rows = cursor.fetchall()
+
+    print(rows)
     
     for row in rows:
         print("{0} {1} {2} {3}".format(row[0], row[1], row[2], row[3]))
 
-lambda_handler()
+
 
