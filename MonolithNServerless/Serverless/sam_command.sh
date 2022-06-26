@@ -4,7 +4,7 @@ if [ $1 == "deploy" ]
 then
     # make a zip of source file and its dependency
     cd BeerInventory
-    zip GetBeerInInventory.zip GetBeerInInventory.py psycopg2 aws_psycopg2-1.2.1.dist-info
+    zip GetBeerInInventory.zip GetBeerInInventory.py pymysql PyMySQL-1.0.2.dist-info
 
     # come back to serverless root folder
     cd ..

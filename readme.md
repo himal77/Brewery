@@ -40,3 +40,7 @@ Instead of installing psycopg2-binary use aws-psycopg2
 ```
 pip install aws-psycopg2 -t .
 ```
+
+#### mysql not connecting to the aws
+Always use separate name for security group for separate database.
+This could lead to blocking of the connection.
