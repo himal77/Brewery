@@ -27,7 +27,7 @@ bash sam_command.sh clean ${cloudstackname}
 
 ### Command to deploy
 ```
-bash sam_command.sh deploy ${cloudstackname}
+bash sam_command.sh deploy ${lambda_name} ${cloudstackname}
 ```
 
 ### Possible/faced error and solution

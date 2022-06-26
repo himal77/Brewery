@@ -7,8 +7,9 @@ Globals:
     OpenApiVersion: '3.0.1'
     TracingEnabled: true
 
+
 Resources:
-  BeerAvailableFn:
+  BeerInventoryService4GetBeerInventory:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: BeerInventory/GetBeerInventory/GetBeerInventory.zip
@@ -19,4 +20,17 @@ Resources:
           Type: Api
           Properties:
             Path: /beerinventories
+            Method: GET
+
+  BeerInventoryService4ChangeBeerQuantity:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: BeerInventory/ChangeBeerQuantity/ChangeBeerQuantity.zip
+      Handler: ChangeBeerQuantity.handler
+      Runtime: python3.6
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /beerinventories/changequantity
             Method: GET
