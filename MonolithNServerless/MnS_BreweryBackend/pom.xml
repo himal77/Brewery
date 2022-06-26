@@ -3,15 +3,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.himal77</groupId>
-	<artifactId>ApiGateway</artifactId>
+	<groupId>com.himal77.MnS</groupId>
+	<artifactId>MnS_BreweryBackend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ApiGateway</name>
+	<name>MnS_BreweryBackend</name>
 
 	<properties>
 		<java.version>11</java.version>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<spring.version>2.7.0</spring.version>
 		<lombok.version>1.18.24</lombok.version>
+		<h2.version>2.1.212</h2.version>
+		<jackson.version>2.13.3</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -22,14 +26,24 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<version>${spring.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -42,5 +56,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
