@@ -90,8 +90,6 @@ Monolith/M_BreweryApiGateway/target/
 Monolith/M_BreweryBackend/target/
 MonolithNServerless/MnS_BreweryApiGateway/target/
 MonolithNServerless/MnS_BreweryBackend/target/
-MonolithNServerless/Serverless/BeerInventory/GetBeerInInventory/psycopg2
-MonolithNServerless/Serverless/BeerInventory/GetBeerInInventory/psycopg2_binary-2.9.3.dist-info
-MonolithNServerless/Serverless/BeerInventory/GetBeerInInventory/psycopg2_binary.libs
-MonolithNServerless/Serverless/BeerInventory/GetBeerInInventory/env
+MonolithNServerless/Serverless/BeerInventory/psycopg2
+MonolithNServerless/Serverless/BeerInventory/aws_psycopg2-1.2.1.dist-info
 

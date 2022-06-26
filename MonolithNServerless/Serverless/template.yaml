@@ -1,18 +1,22 @@
-AWSTemplateFormationVersion: '2010-09-09'
+AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  Lambda local demo
+Description: brewery-application
+
+Globals:
+  Api:
+    OpenApiVersion: '3.0.1'
+    TracingEnabled: true
 
 Resources:
   BeerAvailableFn:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: BeerInventory/
-      Handler: IsBeerAvailable.handler
-      Runtime: python3.7
-#      Events:
-#        ApiEvents:
-#          Type: Api
-#          Properties:
-#            Path: /isbeeravailable
-#            Method: GET
+      CodeUri: BeerInventory/GetBeerInInventory.zip
+      Handler: GetBeerInInventory.handler
+      Runtime: python3.6
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /beerinventories/getbeer
+            Method: GET
