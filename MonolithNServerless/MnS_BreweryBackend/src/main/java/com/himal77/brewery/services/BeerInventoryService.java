@@ -21,10 +21,6 @@ public class BeerInventoryService {
         this.beerService = beerService;
     }
 
-    public List<BeerInventory> findAllInventory() {
-        return beerInventoryRepository.findAll();
-    }
-
     public BeerInventory saveBeerInventory(BeerInventory beerInventory) {
         if (!beerService.isBeerAvailable(beerInventory.getBeerUpc())) {
             throw new BeerNotFoundException();

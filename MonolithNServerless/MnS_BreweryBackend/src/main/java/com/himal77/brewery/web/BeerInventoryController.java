@@ -18,11 +18,6 @@ public class BeerInventoryController {
         this.beerInventoryService = beerInventoryService;
     }
 
-    @GetMapping
-    public ResponseEntity<Object> findAllBeerInventory() {
-        return new ResponseEntity<>(beerInventoryService.findAllInventory(), HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity<Object> saveBeerInventory(@RequestBody BeerInventory beerInventory) {
         return new ResponseEntity<>(beerInventoryService.saveBeerInventory(beerInventory), HttpStatus.OK);
