@@ -44,3 +44,7 @@ pip install aws-psycopg2 -t .
 #### mysql not connecting to the aws
 Always use separate name for security group for separate database.
 This could lead to blocking of the connection.
+
+#### Value do not change for the new invocation
+This may be the reason that the body of the response is global variable. This needs to be empty everytime the response it sent
+Either make it local or clear it before returning.

@@ -20,5 +20,6 @@ public class BaseUrlConfig {
     public String customerurl;
     public String customerorderurl;
     public String beerinventoryurl;
+    public String serverlessurl;
 
 }

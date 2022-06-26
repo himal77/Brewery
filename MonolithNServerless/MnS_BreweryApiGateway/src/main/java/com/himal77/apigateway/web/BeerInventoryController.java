@@ -20,6 +20,8 @@ public class BeerInventoryController {
     private final BaseUrlConfig baseUrlConfig;
     private final RestTemplate restTemplate;
 
+    private final String lambdaBeerInventoriesUrl = "/beerinventories";
+
     @Autowired
     public BeerInventoryController(BaseUrlConfig baseUrlConfig) {
         this.baseUrlConfig = baseUrlConfig;
@@ -27,9 +29,13 @@ public class BeerInventoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAllBeerInventory() throws URISyntaxException {
-        URI uri = new URI(baseUrlConfig.getBeerinventoryurl());
-        ResponseEntity<Object> response = restTemplate.getForEntity(uri, Object.class);
+    public ResponseEntity<Object> findAllBeerInventory(@RequestParam(required = false) String beerUpc) throws URISyntaxException {
+        String url = baseUrlConfig.getServerlessurl() + lambdaBeerInventoriesUrl;
+        if (beerUpc != null) {
+            url += "?beerUpc=" + beerUpc;
+        }
+        System.out.print(url);
+        ResponseEntity<Object> response = restTemplate.getForEntity(new URI(url), Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 

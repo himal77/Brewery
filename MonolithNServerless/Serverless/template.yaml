@@ -18,5 +18,5 @@ Resources:
         ApiEvents:
           Type: Api
           Properties:
-            Path: /beerinventories/getbeer
+            Path: /beerinventories
             Method: GET
