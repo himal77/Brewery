@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: brewery-application
+
+Globals:
+  Api:
+    OpenApiVersion: '3.0.1'
+    TracingEnabled: true
+
+Resources:
+  BeerInventoryService4GetBeerInventory:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: BeerInventory/GetBeerInventory/GetBeerInventory.zip
+      Handler: GetBeerInventory.handler
+      Runtime: python3.6
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /beerinventories
+            Method: GET

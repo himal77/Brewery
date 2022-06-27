@@ -30,6 +30,26 @@ bash sam_command.sh clean ${cloudstackname}
 bash sam_command.sh deploy ${lambda_name} ${cloudstackname}
 ```
 
+##Commands
+#### clean the s3 and remove the stack named brewery
+```
+bash sam_command.sh clean brewery
+```
+#### deploy all the lambdas
+```
+bash sam_command.sh deploy all brewery
+```
+#### deploy only getbeerinventory lambda
+```
+bash sam_command.sh deploy getbeerinventory brewery
+```
+
+#### deploy only changebeerquantity lambda
+```
+bash sam_command.sh deploy changebeerquantity brewery
+```
+
+
 ### Possible/faced error and solution
 #### API Internal server error for invoking lambda
 Path: /beerinventories/getbeer  
@@ -48,3 +68,7 @@ This could lead to blocking of the connection.
 #### Value do not change for the new invocation
 This may be the reason that the body of the response is global variable. This needs to be empty everytime the response it sent
 Either make it local or clear it before returning.
+
+#### The order of the column which the data is returned
+The column order in the database lies in the alphabetical order of column name.  
+Result will be returned in the same order

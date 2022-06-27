@@ -9,7 +9,7 @@ CHANGE_BEER_QUANTITY="changebeerquantity"
 ALL="all"
 APPLICATION=$3
 
-function cd_twice() {
+function cd_back_twice() {
     cd ..
     cd ..
 }
@@ -18,26 +18,26 @@ function createzip_beerinventory_changebeerquanity() {
     # make a zip of source file and its dependency
     cd BeerInventory/ChangeBeerQuantity
     zip -r ChangeBeerQuantity.zip *
-    cd_twice
+    cd_back_twice
 }
 
 function createzip_beerinventory_getbeerinventory() {
    # make a zip of source file and its dependency
     cd BeerInventory/GetBeerInventory
     zip -r GetBeerInventory.zip *
-    cd_twice
+    cd_back_twice
 }
 
 function clear_zips() {
     # clear zip after deploying
     cd BeerInventory/GetBeerInventory
     rm GetBeerInventory.zip
-    cd_twice
+    cd_back_twice
 
     # clear zip after deploying
     cd BeerInventory/ChangeBeerQuantity
     rm ChangeBeerQuantity.zip
-    cd_twice
+    cd_back_twice
 }
 
 function deploy_beerinventory_getbeerinventory() {
