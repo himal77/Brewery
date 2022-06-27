@@ -39,7 +39,7 @@ public class CustomerOrderService {
         }
         beerInventoryService.decreaseBeerQuantityInInventory(customerOrder.getBeerUpc(), customerOrder.getQuantity());
         if (customerOrder.getOrderId() == null) {
-            customerOrder.setOrderId(UUID.randomUUID());
+            customerOrder.setOrderId(UUID.randomUUID().toString());
         }
         customerOrder.setDate(new Date(System.currentTimeMillis()));
         customerOrder.setTime(new Time(System.currentTimeMillis()));
