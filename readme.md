@@ -72,3 +72,10 @@ Either make it local or clear it before returning.
 #### The order of the column which the data is returned
 The column order in the database lies in the alphabetical order of column name.  
 Result will be returned in the same order
+
+#### How to ignore any folder with specific name?
+https://stackoverflow.com/questions/1470572/ignoring-any-bin-directory-on-a-git-project
+
+you can just give the name of the folder and /.
+e.g 
+pymysql/ 

@@ -90,8 +90,5 @@ Monolith/M_BreweryApiGateway/target/
 Monolith/M_BreweryBackend/target/
 MonolithNServerless/MnS_BreweryApiGateway/target/
 MonolithNServerless/MnS_BreweryBackend/target/
-MonolithNServerless/Serverless/BeerInventory/GetBeerInventory/pymysql
-MonolithNServerless/Serverless/BeerInventory/GetBeerInventory/PyMySQL-1.0.2.dist-info
-MonolithNServerless/Serverless/BeerInventory/ChangeBeerQuantity/pymysql
-MonolithNServerless/Serverless/BeerInventory/ChangeBeerQuantity/PyMySQL-1.0.2.dist-info
-
+pymysql/
+PyMySQL-1.0.2.dist-info/

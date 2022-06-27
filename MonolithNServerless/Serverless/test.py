@@ -1,6 +1,7 @@
 import json
 from BeerInventory.ChangeBeerQuantity.ChangeBeerQuantity import handler as change_handler
 from BeerInventory.GetBeerInventory.GetBeerInventory import handler as get_handler
+from BeerInventory.BeerQuantityStatus.BeerQuantityStatus import handler as status_handler
 
 BEER_UPC = "0083783375213"
 
@@ -33,5 +34,18 @@ def beer_quantity_change_test(changeCmdType, quantity):
     else:
         print("CHANGE BEER QUANTITY TEST PASSED!!!!")
 
+
+def test_status_should_not_have_exception():
+    try:
+        queryStringParameters = {"beerUpc": BEER_UPC}
+        events = {"queryStringParameters": queryStringParameters}
+        response = status_handler(events, "")
+        body = json.loads(response['body'])
+        print(body)
+        print("No Error TEST PASSED")
+    except:
+        print("Error TEST FAILED")
+
 beer_quantity_change_test("decrease", 400)
 beer_quantity_change_test("increase", 7)
+test_status_should_not_have_exception()
