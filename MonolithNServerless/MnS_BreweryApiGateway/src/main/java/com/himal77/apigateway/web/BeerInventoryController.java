@@ -3,8 +3,6 @@ package com.himal77.apigateway.web;
 import com.himal77.apigateway.config.BaseUrlConfig;
 import com.himal77.apigateway.domain.BeerInventory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 
 @RequestMapping("/beerinventories")
 @RestController
@@ -21,6 +20,7 @@ public class BeerInventoryController {
     private final RestTemplate restTemplate;
 
     private final String lambdaBeerInventoriesUrl = "/beerinventories";
+    private final String lambdaChangeBeerQuantityUrl = "/beerinventories/changequantity";
 
     @Autowired
     public BeerInventoryController(BaseUrlConfig baseUrlConfig) {
@@ -48,17 +48,23 @@ public class BeerInventoryController {
 
     @PutMapping("/increaseQuantity/{beerUpc}")
     public ResponseEntity<Object> increaseBeerQuantityInInventory(@PathVariable String beerUpc, @RequestParam Integer quantity) throws URISyntaxException {
-        URI uri = new URI(baseUrlConfig.getBeerinventoryurl() + "/increaseQuantity/" + beerUpc + "?quantity=" + quantity);
-        HttpEntity<String> entity = new HttpEntity<>("");
-        ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.PUT, entity, Object.class);
+        String url = baseUrlConfig.getServerlessurl() + lambdaChangeBeerQuantityUrl;
+        if (beerUpc != null) {
+            url += MessageFormat.format("?beerUpc={0}&changeCmdType=increase&quantity={1}", beerUpc, quantity);
+        }
+        System.out.println(url);
+        ResponseEntity<Object> response = restTemplate.getForEntity(new URI(url), Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 
     @PutMapping("/decreaseQuantity/{beerUpc}")
     public ResponseEntity<Object> decreaseBeerQuantityInInventory(@PathVariable String beerUpc, @RequestParam Integer quantity) throws URISyntaxException {
-        URI uri = new URI(baseUrlConfig.getBeerinventoryurl() + "/decreaseQuantity/" + beerUpc + "?quantity=" + quantity);
-        HttpEntity<String> entity = new HttpEntity<>("");
-        ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.PUT, entity, Object.class);
+        String url = baseUrlConfig.getServerlessurl() + lambdaChangeBeerQuantityUrl;
+        if (beerUpc != null) {
+            url += MessageFormat.format("?beerUpc={0}&changeCmdType=decrease&quantity={1}", beerUpc, quantity);
+        }
+        System.out.print(url);
+        ResponseEntity<Object> response = restTemplate.getForEntity(new URI(url), Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 
