@@ -652,6 +652,354 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "serverless_direct",
+			"item": [
+				{
+					"name": "BeerInventory",
+					"item": [
+						{
+							"name": "/beerinventories/increaseQuantity/",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/beerinventories/increaseQuantity/{{beerUpc}}?quantity=50",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"beerinventories",
+										"increaseQuantity",
+										"{{beerUpc}}"
+									],
+									"query": [
+										{
+											"key": "quantity",
+											"value": "50"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "beerinventories/decreaseQuantity/",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/beerinventories/decreaseQuantity/{{beerUpc}}?quantity=49",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"beerinventories",
+										"decreaseQuantity",
+										"{{beerUpc}}"
+									],
+									"query": [
+										{
+											"key": "quantity",
+											"value": "49"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/beerinventories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/beerinventories?beerUpc={{beerUpc}}",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"beerinventories"
+									],
+									"query": [
+										{
+											"key": "beerUpc",
+											"value": "{{beerUpc}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/beerinventories",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"beerUpc\": \"{{beerUpc}}\",\n    \"quantityOnHand\": \"50\",\n    \"minOnHand\": 4,\n    \"maxOnHand\": 200\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/beerinventories",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"beerinventories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/beerinventories/",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/beerinventories/{{beerUpc}}",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"beerinventories",
+										"{{beerUpc}}"
+									],
+									"query": [
+										{
+											"key": "quantity",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DirectToServerless",
+					"item": [
+						{
+							"name": "beerinventories",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"beerUpc\", jsonData[0].beerUpc);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{serverless_host}}/beerinventories?beerUpc={{beerUpc}}",
+									"host": [
+										"{{serverless_host}}"
+									],
+									"path": [
+										"beerinventories"
+									],
+									"query": [
+										{
+											"key": "beerUpc",
+											"value": "{{beerUpc}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "changebeerquantity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"beerUpc\", jsonData.beerUpc);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{serverless_host}}/beerinventories/changequantity?beerUpc={{beerUpc}}&changeCmdType=decrease&quantity=110",
+									"host": [
+										"{{serverless_host}}"
+									],
+									"path": [
+										"beerinventories",
+										"changequantity"
+									],
+									"query": [
+										{
+											"key": "beerUpc",
+											"value": "{{beerUpc}}"
+										},
+										{
+											"key": "changeCmdType",
+											"value": "decrease"
+										},
+										{
+											"key": "quantity",
+											"value": "110"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "beerquantitystatus",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"beerUpc\", jsonData.beerUpc);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{serverless_host}}/beerinventories/quantitystatus?beerUpc=0631234200036",
+									"host": [
+										"{{serverless_host}}"
+									],
+									"path": [
+										"beerinventories",
+										"quantitystatus"
+									],
+									"query": [
+										{
+											"key": "beerUpc",
+											"value": "0631234200036"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "savecustomerorder",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"beerUpc\", jsonData.beerUpc);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"customerId\":\"123\",\n    \"beerUpc\":\"123\",\n    \"quantity\":5\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{serverless_host}}/customerorders",
+									"host": [
+										"{{serverless_host}}"
+									],
+									"path": [
+										"customerorders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "savebreworder",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"beerUpc\", jsonData.beerUpc);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"breweryId\":\"brewery1\",\n    \"beerUpc\":\"123\",\n    \"quantity\":12\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{serverless_host}}/breworders",
+									"host": [
+										"{{serverless_host}}"
+									],
+									"path": [
+										"breworders"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
 		}
 	],
 	"event": [
