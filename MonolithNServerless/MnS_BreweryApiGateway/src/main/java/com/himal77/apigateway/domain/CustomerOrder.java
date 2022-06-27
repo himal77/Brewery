@@ -12,7 +12,6 @@ import java.util.UUID;
 @Getter
 @Builder
 public class CustomerOrder {
-
     private UUID orderId;
     private String customerId;
     private String beerUpc;
