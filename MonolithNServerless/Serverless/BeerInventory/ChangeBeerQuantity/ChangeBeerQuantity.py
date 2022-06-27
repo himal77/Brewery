@@ -43,7 +43,7 @@ def handler(event, context):
     # if decrease, check to not make quantity in minus.
     if changeCmdType == "decrease":
         if available_quantity < quantity:
-            statement = construct_statement(available_quantity, beerUpc)
+            statement = construct_statement(0, beerUpc)
         else:
             new_quantity = available_quantity - quantity
             statement = construct_statement(new_quantity, beerUpc)

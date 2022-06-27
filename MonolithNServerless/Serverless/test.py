@@ -33,5 +33,5 @@ def beer_quantity_change_test(changeCmdType, quantity):
     else:
         print("CHANGE BEER QUANTITY TEST PASSED!!!!")
 
-beer_quantity_change_test("decrease", 4)
+beer_quantity_change_test("decrease", 400)
 beer_quantity_change_test("increase", 7)
