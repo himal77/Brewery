@@ -60,3 +60,16 @@ Resources:
           Properties:
             Path: /customerorders
             Method: POST
+
+  BrewOrderService4SaveBrewOrder:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: BrewOrder/SaveBrewOrder/SaveBrewOrder.zip
+      Handler: SaveBrewOrder.handler
+      Runtime: python3.6
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /breworders
+            Method: POST

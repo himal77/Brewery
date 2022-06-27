@@ -8,6 +8,7 @@ GET_BEER_INVENTORY="getbeerinventory"
 CHANGE_BEER_QUANTITY="changebeerquantity"
 BEER_QUANTITY_STATUS="beerquantitystatus"
 SAVE_CUSTOMER_ORDER="savecustomerorder"
+SAVE_BREW_ORDER="savebreworder"
 ALL="all"
 APPLICATION=$3
 
@@ -34,6 +35,12 @@ function createzip_beerinventory_getbeerinventory() {
     cd_back_twice
 }
 
+function createzip_breworder_savebreworder() {
+    cd BrewOrder/SaveBrewOrder
+    zip -r SaveBrewOrder.zip *
+    cd_back_twice
+}
+
 function createzip_customerorder_savecustomerorder() {
     cd CustomerOrder/SaveCustomerOrder
     zip -r SaveCustomerOrder.zip *
@@ -44,6 +51,7 @@ function create_all_zips() {
     createzip_beerinventory_beerquantitystatus
     createzip_beerinventory_changebeerquanity
     createzip_beerinventory_getbeerinventory
+    createzip_breworder_savebreworder
     createzip_customerorder_savecustomerorder
 }
 
@@ -58,6 +66,10 @@ function clear_zips() {
 
     cd BeerInventory/GetBeerInventory
     rm GetBeerInventory.zip
+    cd_back_twice
+
+    cd BrewOrder/SaveBrewOrder
+    rm SaveBrewOrder.zip
     cd_back_twice
 
     cd CustomerOrder/SaveCustomerOrder
@@ -75,6 +87,10 @@ function deploy_beerinventory_changebeerquantity() {
 
 function deploy_beerinventory_getbeerinventory() {
     sam deploy --s3-bucket himalpuri --template template_getbeerinventory.yaml --stack-name $APPLICATION --capabilities CAPABILITY_IAM
+}
+
+function deploy_breworder_savebreworder() {
+    sam deploy --s3-bucket himalpuri --template template_savebreworder.yaml --stack-name $APPLICATION --capabilities CAPABILITY_IAM
 }
 
 function deploy_customerorder_savecustomerorder() {
@@ -103,6 +119,10 @@ then
     then
         createzip_beerinventory_getbeerinventory
         deploy_beerinventory_getbeerinventory
+    elif [ $LAMBDA_NAME == $SAVE_BREW_ORDER ]
+    then
+        createzip_breworder_savebreworder
+        deploy_breworder_savebreworder
     elif [ $LAMBDA_NAME == $SAVE_CUSTOMER_ORDER ]
     then
         createzip_customerorder_savecustomerorder
