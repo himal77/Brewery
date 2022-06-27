@@ -47,3 +47,16 @@ Resources:
           Properties:
             Path: /beerinventories/quantitystatus
             Method: GET
+
+  CustomerOrderService4SaveCustomerOrder:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CustomerOrder/SaveCustomerOrder/SaveCustomerOrder.zip
+      Handler: SaveCustomerOrder.handler
+      Runtime: python3.6
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /customerorders
+            Method: POST

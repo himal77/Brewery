@@ -7,6 +7,7 @@ LAMBDA_NAME=$2
 GET_BEER_INVENTORY="getbeerinventory"
 CHANGE_BEER_QUANTITY="changebeerquantity"
 BEER_QUANTITY_STATUS="beerquantitystatus"
+SAVE_CUSTOMER_ORDER="savecustomerorder"
 ALL="all"
 APPLICATION=$3
 
@@ -33,10 +34,17 @@ function createzip_beerinventory_getbeerinventory() {
     cd_back_twice
 }
 
+function createzip_customerorder_savecustomerorder() {
+    cd CustomerOrder/SaveCustomerOrder
+    zip -r SaveCustomerOrder.zip *
+    cd_back_twice
+}
+
 function create_all_zips() {
     createzip_beerinventory_beerquantitystatus
     createzip_beerinventory_changebeerquanity
     createzip_beerinventory_getbeerinventory
+    createzip_customerorder_savecustomerorder
 }
 
 function clear_zips() {
@@ -50,6 +58,10 @@ function clear_zips() {
 
     cd BeerInventory/GetBeerInventory
     rm GetBeerInventory.zip
+    cd_back_twice
+
+    cd CustomerOrder/SaveCustomerOrder
+    rm SaveCustomerOrder.zip
     cd_back_twice
 }
 
@@ -65,6 +77,10 @@ function deploy_beerinventory_getbeerinventory() {
     sam deploy --s3-bucket himalpuri --template template_getbeerinventory.yaml --stack-name $APPLICATION --capabilities CAPABILITY_IAM
 }
 
+function deploy_customerorder_savecustomerorder() {
+    sam deploy --s3-bucket himalpuri --template template_savecustomerorder.yaml --stack-name $APPLICATION --capabilities CAPABILITY_IAM
+}
+
 function deploy_all() {
     sam deploy --s3-bucket himalpuri --template template.yaml --stack-name $APPLICATION --capabilities CAPABILITY_IAM
 }
@@ -77,19 +93,20 @@ then
 
     if [ $LAMBDA_NAME == $BEER_QUANTITY_STATUS ]
     then
-         # creating change beer quantity zip and deploying
         createzip_beerinventory_beerquantitystatus
         deploy_beerinventory_beerquantitystatus
     elif [ $LAMBDA_NAME == $CHANGE_BEER_QUANTITY ]
     then
-        # creating change beer quantity zip and deploying
         createzip_beerinventory_changebeerquanity
         deploy_beerinventory_changebeerquantity
     elif [ $LAMBDA_NAME == $GET_BEER_INVENTORY ]
     then
-        # creating get beer inventory zip and deploying
         createzip_beerinventory_getbeerinventory
         deploy_beerinventory_getbeerinventory
+    elif [ $LAMBDA_NAME == $SAVE_CUSTOMER_ORDER ]
+    then
+        createzip_customerorder_savecustomerorder
+        deploy_customerorder_savecustomerorder
     elif [ $LAMBDA_NAME == $ALL ]
     then
         # create all the zips of availabel service and deploy

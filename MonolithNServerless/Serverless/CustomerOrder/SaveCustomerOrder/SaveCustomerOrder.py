@@ -24,9 +24,10 @@ def handler(event, context):
     cursor = connection.cursor()
 
     # extracting information from query params
-    customerId = event['body']['customerId']
-    beerUpc = event['body']['beerUpc']
-    quantity = event['body']['quantity']
+    decodedBody = json.loads(event['body'])
+    customerId = decodedBody['customerId']
+    beerUpc = decodedBody['beerUpc']
+    quantity = decodedBody['quantity']
 
     # constructing current date and time
     e = datetime.datetime.now()

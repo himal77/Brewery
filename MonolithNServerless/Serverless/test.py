@@ -53,7 +53,7 @@ def test_customer_order_should_not_get_exception():
     try:
         # constructing the query parameter
         body = {"beerUpc": "123", "customerId": "111", "quantity": 15}
-        events = {"body": body}
+        events = {"body": json.dumps(body)}
         response = customer_order_handler(events, "")
         print(json.loads(response['body']))
         print("No Error CUSTOMER ORDER PASSED")
