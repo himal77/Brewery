@@ -5,6 +5,8 @@ import com.himal77.brewery.exception.BeerNotFoundException;
 import com.himal77.brewery.repositories.BrewOrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 @Service
@@ -28,7 +30,8 @@ public class BrewOrderService {
         BrewOrder brewed = BrewOrder.builder()
                 .brewId(brewOrder.getBrewId())
                 .breweryId(brewOrder.getBreweryId())
-                .brewedDateInMilliSec(System.currentTimeMillis())
+                .date(new Date(System.currentTimeMillis()))
+                .time(new Time(System.currentTimeMillis()))
                 .beerUpc(brewOrder.getBeerUpc())
                 .quantity(brewOrder.getQuantity())
                 .build();

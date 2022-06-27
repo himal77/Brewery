@@ -25,18 +25,21 @@ public class DefaultInventory implements CommandLineRunner {
                 .beerUpc(DefaultBeer.BEER_1_UPC)
                 .quantityOnHand(100)
                 .maxOnHand(200)
+                .minOnHand(20)
                 .build();
 
         BeerInventory beer_2_Beer_inventory = BeerInventory.builder()
                 .beerUpc(DefaultBeer.BEER_2_UPC)
                 .quantityOnHand(70)
                 .maxOnHand(80)
+                .minOnHand(20)
                 .build();
 
         BeerInventory beer_3_Beer_inventory = BeerInventory.builder()
                 .beerUpc(DefaultBeer.BEER_3_UPC)
                 .quantityOnHand(30)
                 .maxOnHand(35)
+                .minOnHand(20)
                 .build();
 
         beerInventoryRepository.save(beer_1_Beer_inventory);

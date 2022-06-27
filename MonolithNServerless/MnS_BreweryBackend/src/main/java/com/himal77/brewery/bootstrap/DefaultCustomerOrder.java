@@ -22,7 +22,7 @@ public class DefaultCustomerOrder implements CommandLineRunner {
         CustomerOrder order1 = CustomerOrder.builder()
                 .customerId("1")
                 .beerUpc(DefaultBeer.BEER_1_UPC)
-                .orderId(UUID.randomUUID())
+                .orderId(UUID.randomUUID().toString())
                 .quantity(10)
                 .date(new Date(22, 5, 10))
                 .build();
@@ -30,7 +30,7 @@ public class DefaultCustomerOrder implements CommandLineRunner {
         CustomerOrder order2 = CustomerOrder.builder()
                 .customerId("2")
                 .beerUpc(DefaultBeer.BEER_2_UPC)
-                .orderId(UUID.randomUUID())
+                .orderId(UUID.randomUUID().toString())
                 .quantity(10)
                 .date(new Date(22, 5, 11))
                 .build();
@@ -38,7 +38,7 @@ public class DefaultCustomerOrder implements CommandLineRunner {
         CustomerOrder order3 = CustomerOrder.builder()
                 .customerId("3")
                 .beerUpc(DefaultBeer.BEER_3_UPC)
-                .orderId(UUID.randomUUID())
+                .orderId(UUID.randomUUID().toString())
                 .quantity(5)
                 .date(new Date(22, 5, 12))
                 .build();
