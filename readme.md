@@ -79,3 +79,17 @@ https://stackoverflow.com/questions/1470572/ignoring-any-bin-directory-on-a-git-
 you can just give the name of the folder and /.
 e.g 
 pymysql/ 
+
+#### AWS: Access initial input in the step function from any other state.
+This lies in the context. 
+$$ will give access to the context, which contains all the gloabal information required
+
+if i want to find the initalial quanity, i will be accessing by this:  
+$$.Execution.Input.quantity
+
+
+#### parse the string json returned by lambda to json in step function
+States.StringToJson(returnedValue)
+
+if i want to use the same payload but only in json format:  
+"Payload.$": "States.StringToJson($.Payload)",
