@@ -68,3 +68,23 @@ beer_quantity_change_test("increase", 7)
 test_status_should_not_have_exception()
 test_customer_order_should_not_get_exception()
 test_brew_order_should_not_get_exception()
+
+
+
+''''
+Test json for the step function
+
+
+{
+   "OrderType":"CUSTOMER_ORDER",
+   "customerId":"123",
+   "beerUpc":"0631234200036",
+   "quantity":999
+}
+{
+   "OrderType":"BREW_ORDER",
+   "breweryId":"brewery1",
+   "beerUpc":"0631234200036",
+   "quantity":12
+}
+'''

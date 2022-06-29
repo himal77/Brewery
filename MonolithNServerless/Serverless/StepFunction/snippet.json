@@ -1,7 +1,27 @@
 {
   "Comment": "Place order for customer or for brewing",
-  "StartAt": "ProcessOrder",
+  "StartAt": "BeerNotPresent",
   "States": {
+    "BeerNotPresent": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Not": {
+            "Variable": "$.beerUpc",
+            "IsPresent": true
+          },
+          "Next": "BeerUpcAbsent"
+        }
+      ],
+      "Default": "ProcessOrder"
+    },
+    "BeerUpcAbsent": {
+      "Type": "Pass",
+      "End": true,
+      "Parameters": {
+        "Message": "BeerUPC not present"
+      }
+    },
     "ProcessOrder": {
       "Comment": "Check for processing the custome order or brew order",
       "Type": "Choice",
@@ -14,35 +34,27 @@
         {
           "Variable": "$.OrderType",
           "StringEquals": "CUSTOMER_ORDER",
-          "Next": "isBeerUpcExist"
+          "Next": "Customer_Order"
         }
       ]
     },
-    "isBeerUpcExist": {
-      "Type": "Choice",
-      "Choices": [
-        {
-          "Not": {
-            "Variable": "$.beerUpc",
-            "IsPresent": true
-          },
-          "Next": "BeerUpcNoPresent"
-        }
-      ],
-      "Default": "Customer_Order"
-    },
-    "BeerUpcNoPresent": {
-      "Type": "Pass",
-      "End": true,
-      "Result": {
-        "message": "Beer Upc not present"
-      }
-    },
     "Brew_Order": {
       "Type": "Pass",
-      "Next": "Parallel (1)"
+      "Next": "SaveBrewAndIncreaseBeer",
+      "Parameters": {
+        "body": {
+          "breweryId.$": "$$.Execution.Input.breweryId",
+          "beerUpc.$": "$$.Execution.Input.beerUpc",
+          "quantity.$": "$$.Execution.Input.quantity"
+        },
+        "queryStringParameters": {
+          "changeCmdType": "increase",
+          "beerUpc.$": "$$.Execution.Input.beerUpc",
+          "quantity.$": "$$.Execution.Input.quantity"
+        }
+      }
     },
-    "Parallel (1)": {
+    "SaveBrewAndIncreaseBeer": {
       "Type": "Parallel",
       "Branches": [
         {
@@ -51,7 +63,6 @@
             "SaveBrewOrder": {
               "Type": "Task",
               "Resource": "arn:aws:states:::lambda:invoke",
-              "OutputPath": "$.Payload",
               "Parameters": {
                 "Payload.$": "$",
                 "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-BrewOrderService4SaveBrewOrder-mqmeL6uNphoV:$LATEST"
@@ -100,7 +111,21 @@
           }
         }
       ],
-      "End": true
+      "Parameters": {
+        "body.$": "States.JsonToString($.body)",
+        "queryStringParameters.$": "$.queryStringParameters"
+      },
+      "Next": "BrewOrderSuccessful"
+    },
+    "BrewOrderSuccessful": {
+      "Type": "Pass",
+      "End": true,
+      "Parameters": {
+        "Message": "Brew order successful",
+        "breweryId": "$$.Execution.Input.breweryId",
+        "beerUpc": "$$.Execution.Input.beerUpc",
+        "quantity": "$$.Execution.Input.quantity"
+      }
     },
     "Customer_Order": {
       "Type": "Pass",
@@ -181,15 +206,21 @@
           "Next": "Yes"
         }
       ],
-      "Default": "No"
+      "Default": "BeerQuantityNotAvailable"
     },
-    "No": {
+    "BeerQuantityNotAvailable": {
       "Type": "Pass",
       "End": true,
       "Result": {
         "beerUpc": "$$.Execution.Input.beerUpc",
         "quantity": "$$.Execution.Input.quantity",
         "message": "Error processing request, Not Enough Quantity in the inventory"
+      },
+      "Parameters": {
+        "Message": "Customer order cannot be fullfill, inventory low",
+        "customerId.$": "$$.Execution.Input.customerId",
+        "beerUpc.$": "$$.Execution.Input.beerUpc",
+        "quantity.$": "$$.Execution.Input.quantity"
       }
     },
     "Yes": {
@@ -202,7 +233,7 @@
           "quantity.$": "$$.Execution.Input.quantity"
         },
         "queryStringParameters": {
-          "changeCmdType": "increase",
+          "changeCmdType": "decrease",
           "beerUpc.$": "$$.Execution.Input.beerUpc",
           "quantity.$": "$$.Execution.Input.quantity"
         }
@@ -210,7 +241,7 @@
     },
     "Parallel": {
       "Type": "Parallel",
-      "Next": "ReturnToInvoker",
+      "Next": "CustomerOrderSuccessful",
       "Branches": [
         {
           "StartAt": "SaveBeerOrder",
@@ -272,13 +303,13 @@
         "queryStringParameters.$": "$.queryStringParameters"
       }
     },
-    "ReturnToInvoker": {
+    "CustomerOrderSuccessful": {
       "Type": "Pass",
       "End": true,
       "Parameters": {
-        "breweryId": "$.breweryId",
-        "beerUpc": "$.beerUpc",
-        "quantity": "$.quantity"
+        "customerId.$": "$$.Execution.Input.customerId",
+        "beerUpc.$": "$$.Execution.Input.beerUpc",
+        "quantity.$": "$$.Execution.Input.quantity"
       },
       "Result": {
         "breweryId": "$.breweryId",
