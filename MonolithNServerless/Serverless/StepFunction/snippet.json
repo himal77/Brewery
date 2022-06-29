@@ -1,253 +1,290 @@
 {
-    "Comment": "Place order for customer or for brewing",
-    "StartAt": "ProcessOrder",
-    "States": {
-      "ProcessOrder": {
-        "Comment": "Check for processing the custome order or brew order",
-        "Type": "Choice",
-        "Choices": [
-          {
-            "Variable": "$.OrderType",
-            "StringEquals": "BREW_ORDER",
-            "Next": "Brew_Order"
+  "Comment": "Place order for customer or for brewing",
+  "StartAt": "ProcessOrder",
+  "States": {
+    "ProcessOrder": {
+      "Comment": "Check for processing the custome order or brew order",
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.OrderType",
+          "StringEquals": "BREW_ORDER",
+          "Next": "Brew_Order"
+        },
+        {
+          "Variable": "$.OrderType",
+          "StringEquals": "CUSTOMER_ORDER",
+          "Next": "isBeerUpcExist"
+        }
+      ]
+    },
+    "isBeerUpcExist": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Not": {
+            "Variable": "$.beerUpc",
+            "IsPresent": true
           },
-          {
-            "Variable": "$.OrderType",
-            "StringEquals": "CUSTOMER_ORDER",
-            "Next": "Customer_Order"
-          }
-        ]
-      },
-      "Brew_Order": {
-        "Type": "Pass",
-        "Next": "Parallel (1)"
-      },
-      "Parallel (1)": {
-        "Type": "Parallel",
-        "Branches": [
-          {
-            "StartAt": "SaveBrewOrder",
-            "States": {
-              "SaveBrewOrder": {
-                "Type": "Task",
-                "Resource": "arn:aws:states:::lambda:invoke",
-                "OutputPath": "$.Payload",
-                "Parameters": {
-                  "Payload.$": "$",
-                  "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-BrewOrderService4SaveBrewOrder-mqmeL6uNphoV:$LATEST"
-                },
-                "Retry": [
-                  {
-                    "ErrorEquals": [
-                      "Lambda.ServiceException",
-                      "Lambda.AWSLambdaException",
-                      "Lambda.SdkClientException"
-                    ],
-                    "IntervalSeconds": 2,
-                    "MaxAttempts": 6,
-                    "BackoffRate": 2
-                  }
-                ],
-                "End": true
-              }
-            }
-          },
-          {
-            "StartAt": "ChangeBeerQuantity_increase",
-            "States": {
-              "ChangeBeerQuantity_increase": {
-                "Type": "Task",
-                "Resource": "arn:aws:states:::lambda:invoke",
-                "OutputPath": "$.Payload",
-                "Parameters": {
-                  "Payload.$": "$",
-                  "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-BeerInventoryService4ChangeBeerQuantity-9GUb5DwK5Nt6:$LATEST"
-                },
-                "Retry": [
-                  {
-                    "ErrorEquals": [
-                      "Lambda.ServiceException",
-                      "Lambda.AWSLambdaException",
-                      "Lambda.SdkClientException"
-                    ],
-                    "IntervalSeconds": 2,
-                    "MaxAttempts": 6,
-                    "BackoffRate": 2
-                  }
-                ],
-                "End": true
-              }
+          "Next": "BeerUpcNoPresent"
+        }
+      ],
+      "Default": "Customer_Order"
+    },
+    "BeerUpcNoPresent": {
+      "Type": "Pass",
+      "End": true,
+      "Result": {
+        "message": "Beer Upc not present"
+      }
+    },
+    "Brew_Order": {
+      "Type": "Pass",
+      "Next": "Parallel (1)"
+    },
+    "Parallel (1)": {
+      "Type": "Parallel",
+      "Branches": [
+        {
+          "StartAt": "SaveBrewOrder",
+          "States": {
+            "SaveBrewOrder": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "OutputPath": "$.Payload",
+              "Parameters": {
+                "Payload.$": "$",
+                "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-BrewOrderService4SaveBrewOrder-mqmeL6uNphoV:$LATEST"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException"
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 6,
+                  "BackoffRate": 2
+                }
+              ],
+              "End": true
             }
           }
-        ],
-        "End": true
-      },
-      "Customer_Order": {
-        "Type": "Pass",
-        "Next": "GetBeerInventory",
-        "Result": {
-          "queryStringParameters": {
-            "OrderType": "CUSTOMER_ORDER",
-            "breweryId": 123,
-            "beerUpc": "0631234200036",
-            "quantity": 11
-          }
-        }
-      },
-      "GetBeerInventory": {
-        "Type": "Task",
-        "Resource": "arn:aws:states:::lambda:invoke",
-        "Parameters": {
-          "Payload.$": "$",
-          "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-BeerInventoryService4GetBeerInventory-dABAB7IMWiLh:$LATEST"
         },
-        "Retry": [
-          {
-            "ErrorEquals": [
-              "Lambda.ServiceException",
-              "Lambda.AWSLambdaException",
-              "Lambda.SdkClientException"
-            ],
-            "IntervalSeconds": 2,
-            "MaxAttempts": 6,
-            "BackoffRate": 2
-          }
-        ],
-        "Next": "Pass",
-        "ResultSelector": {
-          "Payload.$": "States.StringToJson($.Payload)"
-        }
-      },
-      "Pass": {
-        "Type": "Pass",
-        "Next": "IsBeerQuantityAvailable",
-        "Parameters": {
-          "body": "States.StringToJson($)"
-        },
-        "OutputPath": "$.quantityOnHand"
-      },
-      "IsBeerQuantityAvailable": {
-        "Type": "Choice",
-        "Choices": [
-          {
-            "Variable": "$$.Execution.Input.quantity",
-            "NumericGreaterThanPath": "$.quantityOnHand",
-            "Next": "No"
-          }
-        ],
-        "Default": "Yes"
-      },
-      "No": {
-        "Type": "Pass",
-        "End": true,
-        "Result": {
-          "beerUpc": "$$.Execution.Input.beerUpc",
-          "quantity": "$$.Execution.Input.quantity",
-          "message": "Error processing request, Not Enough Quantity in the inventory"
-        }
-      },
-      "Yes": {
-        "Type": "Pass",
-        "Next": "Parallel",
-        "Parameters": {
-          "body": {
-            "breweryId": "$.breweryId",
-            "beerUpc": "$.beerUpc",
-            "quantity": "$.quantity"
-          },
-          "queryStringParameters": {
-            "changeCmdType": "increase",
-            "beerUpc": "$.beerUpc",
-            "quantity": "$.quantity"
-          }
-        },
-        "Result": {}
-      },
-      "Parallel": {
-        "Type": "Parallel",
-        "Next": "ReturnToInvoker",
-        "Branches": [
-          {
-            "StartAt": "SaveBeerOrder",
-            "States": {
-              "SaveBeerOrder": {
-                "Type": "Task",
-                "Resource": "arn:aws:states:::lambda:invoke",
-                "OutputPath": "$.Payload",
-                "Parameters": {
-                  "Payload.$": "$",
-                  "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-CustomerOrderService4SaveCustomerOrder-s08t7ibQl8EV:$LATEST"
-                },
-                "Retry": [
-                  {
-                    "ErrorEquals": [
-                      "Lambda.ServiceException",
-                      "Lambda.AWSLambdaException",
-                      "Lambda.SdkClientException"
-                    ],
-                    "IntervalSeconds": 2,
-                    "MaxAttempts": 6,
-                    "BackoffRate": 2
-                  }
-                ],
-                "End": true
-              }
-            }
-          },
-          {
-            "StartAt": "ChangeBeerQuanity_Decrease",
-            "States": {
-              "ChangeBeerQuanity_Decrease": {
-                "Type": "Task",
-                "Resource": "arn:aws:states:::lambda:invoke",
-                "OutputPath": "$.Payload",
-                "Parameters": {
-                  "Payload.$": "$",
-                  "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-BeerInventoryService4ChangeBeerQuantity-9GUb5DwK5Nt6:$LATEST"
-                },
-                "Retry": [
-                  {
-                    "ErrorEquals": [
-                      "Lambda.ServiceException",
-                      "Lambda.AWSLambdaException",
-                      "Lambda.SdkClientException"
-                    ],
-                    "IntervalSeconds": 2,
-                    "MaxAttempts": 6,
-                    "BackoffRate": 2
-                  }
-                ],
-                "End": true
-              }
+        {
+          "StartAt": "ChangeBeerQuantity_increase",
+          "States": {
+            "ChangeBeerQuantity_increase": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "OutputPath": "$.Payload",
+              "Parameters": {
+                "Payload.$": "$",
+                "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-BeerInventoryService4ChangeBeerQuantity-9GUb5DwK5Nt6:$LATEST"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException"
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 6,
+                  "BackoffRate": 2
+                }
+              ],
+              "End": true
             }
           }
-        ],
-        "Parameters": {
-          "body": {
-            "breweryId": "$$.Execution.Input.breweryId",
-            "beerUpc": "$$.Execution.Input.beerUpc",
-            "quantity": "$$.Execution.Input.quantity"
-          },
-          "queryStringParameters": {
-            "changeCmdType": "increase",
-            "beerUpc": "$$.Execution.Input.beerUpc",
-            "quantity": "$$.Execution.Input.quantity"
+        }
+      ],
+      "End": true
+    },
+    "Customer_Order": {
+      "Type": "Pass",
+      "Next": "GetBeerInventory",
+      "Parameters": {
+        "queryStringParameters": {
+          "beerUpc.$": "$.beerUpc"
+        }
+      }
+    },
+    "GetBeerInventory": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-BeerInventoryService4GetBeerInventory-dABAB7IMWiLh:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "StringToJson",
+      "ResultSelector": {
+        "body.$": "$.Payload.body"
+      }
+    },
+    "StringToJson": {
+      "Type": "Pass",
+      "Next": "GetBeerInventoryFilter",
+      "Parameters": {
+        "body.$": "States.StringToJson($.body)"
+      }
+    },
+    "GetBeerInventoryFilter": {
+      "Type": "Pass",
+      "Next": "Lambda Invoke",
+      "Parameters": {
+        "aQuantity.$": "$.body.quantityOnHand",
+        "dQuantity.$": "$$.Execution.Input.quantity"
+      }
+    },
+    "Lambda Invoke": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:DemandDivideAvailabilityBeer:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "IsBeerQuantityAvailable"
+    },
+    "IsBeerQuantityAvailable": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.ratio",
+          "NumericGreaterThan": 1,
+          "Next": "Yes"
+        }
+      ],
+      "Default": "No"
+    },
+    "No": {
+      "Type": "Pass",
+      "End": true,
+      "Result": {
+        "beerUpc": "$$.Execution.Input.beerUpc",
+        "quantity": "$$.Execution.Input.quantity",
+        "message": "Error processing request, Not Enough Quantity in the inventory"
+      }
+    },
+    "Yes": {
+      "Type": "Pass",
+      "Next": "Parallel",
+      "Parameters": {
+        "body": {
+          "customerId.$": "$$.Execution.Input.customerId",
+          "beerUpc.$": "$$.Execution.Input.beerUpc",
+          "quantity.$": "$$.Execution.Input.quantity"
+        },
+        "queryStringParameters": {
+          "changeCmdType": "increase",
+          "beerUpc.$": "$$.Execution.Input.beerUpc",
+          "quantity.$": "$$.Execution.Input.quantity"
+        }
+      }
+    },
+    "Parallel": {
+      "Type": "Parallel",
+      "Next": "ReturnToInvoker",
+      "Branches": [
+        {
+          "StartAt": "SaveBeerOrder",
+          "States": {
+            "SaveBeerOrder": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "OutputPath": "$.Payload",
+              "Parameters": {
+                "Payload.$": "$",
+                "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-CustomerOrderService4SaveCustomerOrder-s08t7ibQl8EV:$LATEST"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException"
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 6,
+                  "BackoffRate": 2
+                }
+              ],
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "ChangeBeerQuanity_Decrease",
+          "States": {
+            "ChangeBeerQuanity_Decrease": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "OutputPath": "$.Payload",
+              "Parameters": {
+                "Payload.$": "$",
+                "FunctionName": "arn:aws:lambda:us-west-2:781251715253:function:brewery-BeerInventoryService4ChangeBeerQuantity-9GUb5DwK5Nt6:$LATEST"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException"
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 6,
+                  "BackoffRate": 2
+                }
+              ],
+              "End": true
+            }
           }
         }
+      ],
+      "Parameters": {
+        "body.$": "States.JsonToString($.body)",
+        "queryStringParameters.$": "$.queryStringParameters"
+      }
+    },
+    "ReturnToInvoker": {
+      "Type": "Pass",
+      "End": true,
+      "Parameters": {
+        "breweryId": "$.breweryId",
+        "beerUpc": "$.beerUpc",
+        "quantity": "$.quantity"
       },
-      "ReturnToInvoker": {
-        "Type": "Pass",
-        "End": true,
-        "Parameters": {
-          "breweryId": "$.breweryId",
-          "beerUpc": "$.beerUpc",
-          "quantity": "$.quantity"
-        },
-        "Result": {
-          "breweryId": "$.breweryId",
-          "beerUpc": "$.beerUpc",
-          "quantity": "$.quantity"
-        }
+      "Result": {
+        "breweryId": "$.breweryId",
+        "beerUpc": "$.beerUpc",
+        "quantity": "$.quantity"
       }
     }
   }
+}

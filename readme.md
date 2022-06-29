@@ -88,8 +88,15 @@ if i want to find the initalial quanity, i will be accessing by this:
 $$.Execution.Input.quantity
 
 
-#### parse the string json returned by lambda to json in step function
+#### AWS: parse the string json returned by lambda to json in step function
 States.StringToJson(returnedValue)
 
 if i want to use the same payload but only in json format:  
 "Payload.$": "States.StringToJson($.Payload)",
+
+
+#### AWS: value are not parsed from steps
+always pass with key as "body.$" when creating parameterso that it can be parsed in next step
+be careful, as values will not be parse which are placed in $.value
+visit
+https://blog.devgenius.io/handbook-aws-step-functions-input-and-output-manipulation-f94d57087e41
