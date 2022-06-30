@@ -88,3 +88,9 @@ Test json for the step function
    "quantity":12
 }
 '''
+{
+    \"OrderType\":\"CUSTOMER_ORDER\",
+    \"customerId":\"123\",
+    \"beerUpc":\"0631234200036\",
+    \"quantity\":999
+}
