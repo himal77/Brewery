@@ -43,8 +43,10 @@ public class BrewOrderController {
 
     @PostMapping
     public ResponseEntity<Object> saveBrewOrder(@RequestBody BrewOrder brewOrder) throws URISyntaxException {
-        URI uri = new URI(baseUrlConfig.getBreworderurl());
-        ResponseEntity<Object> response = restTemplate.postForEntity(uri, brewOrder, Object.class);
+        String body = getFinalBody(brewOrder);
+        URI uri = new URI(baseUrlConfig.getStepfuncurl() + "/placeorder");
+        HttpEntity<String> entity = new HttpEntity<>(body);
+        ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.POST, entity, Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 
