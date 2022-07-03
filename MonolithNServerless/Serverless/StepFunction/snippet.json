@@ -121,10 +121,9 @@
       "Type": "Pass",
       "End": true,
       "Parameters": {
-        "Message": "Brew order successful",
-        "breweryId": "$$.Execution.Input.breweryId",
-        "beerUpc": "$$.Execution.Input.beerUpc",
-        "quantity": "$$.Execution.Input.quantity"
+        "quantity.$": "$$.Execution.Input.quantity",
+        "beerUpc.$": "$$.Execution.Input.beerUpc",
+        "breweryId.$": "$$.Execution.Input.breweryId"
       }
     },
     "Customer_Order": {
@@ -211,16 +210,8 @@
     "BeerQuantityNotAvailable": {
       "Type": "Pass",
       "End": true,
-      "Result": {
-        "beerUpc": "$$.Execution.Input.beerUpc",
-        "quantity": "$$.Execution.Input.quantity",
-        "message": "Error processing request, Not Enough Quantity in the inventory"
-      },
       "Parameters": {
-        "Message": "Customer order cannot be fullfill, inventory low",
-        "customerId.$": "$$.Execution.Input.customerId",
-        "beerUpc.$": "$$.Execution.Input.beerUpc",
-        "quantity.$": "$$.Execution.Input.quantity"
+        "Message": "Customer order cannot be fullfill, inventory low"
       }
     },
     "Yes": {
@@ -307,14 +298,9 @@
       "Type": "Pass",
       "End": true,
       "Parameters": {
-        "customerId.$": "$$.Execution.Input.customerId",
+        "quantity.$": "$$.Execution.Input.quantity",
         "beerUpc.$": "$$.Execution.Input.beerUpc",
-        "quantity.$": "$$.Execution.Input.quantity"
-      },
-      "Result": {
-        "breweryId": "$.breweryId",
-        "beerUpc": "$.beerUpc",
-        "quantity": "$.quantity"
+        "customerId.$": "$$.Execution.Input.customerId"
       }
     }
   }

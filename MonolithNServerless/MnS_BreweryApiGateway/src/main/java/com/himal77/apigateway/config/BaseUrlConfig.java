@@ -21,5 +21,7 @@ public class BaseUrlConfig {
     public String customerorderurl;
     public String beerinventoryurl;
     public String serverlessurl;
+    public String stepfuncarn;
+    public String stepfuncurl;
 
 }

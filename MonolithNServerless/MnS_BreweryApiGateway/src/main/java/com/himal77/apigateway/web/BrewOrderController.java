@@ -1,8 +1,13 @@
 package com.himal77.apigateway.web;
 
+import com.google.gson.Gson;
 import com.himal77.apigateway.config.BaseUrlConfig;
 import com.himal77.apigateway.domain.Beer;
 import com.himal77.apigateway.domain.BrewOrder;
+import com.himal77.apigateway.domain.CustomerOrder;
+import com.himal77.apigateway.domain.aws.BrewOrderAws;
+import com.himal77.apigateway.domain.aws.CustomerOrderAws;
+import com.himal77.apigateway.domain.aws.StepFunctionBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -20,11 +25,13 @@ public class BrewOrderController {
 
     private final BaseUrlConfig baseUrlConfig;
     private final RestTemplate restTemplate;
+    private final Gson gson;
 
     @Autowired
     public BrewOrderController(BaseUrlConfig baseUrlConfig) {
         this.baseUrlConfig = baseUrlConfig;
         this.restTemplate = new RestTemplate();
+        gson = new Gson();
     }
 
     @GetMapping
@@ -39,5 +46,11 @@ public class BrewOrderController {
         URI uri = new URI(baseUrlConfig.getBreworderurl());
         ResponseEntity<Object> response = restTemplate.postForEntity(uri, brewOrder, Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+    }
+
+    private String getFinalBody(BrewOrder brewOrder) {
+        BrewOrderAws brewOrderAws = new BrewOrderAws(brewOrder.getBreweryId(), brewOrder.getBeerUpc(), brewOrder.getQuantity());
+        StepFunctionBody stepFunctionBody = new StepFunctionBody(gson.toJson(brewOrderAws), baseUrlConfig.getStepfuncarn());
+        return gson.toJson(stepFunctionBody);
     }
 }
