@@ -26,18 +26,19 @@ import java.text.MessageFormat;
 public class CustomerOrderController {
 
     private final BaseUrlConfig baseUrlConfig;
-    private final RestTemplate restTemplate;
+//    private final RestTemplate restTemplate;
     private final Gson gson;
 
     @Autowired
     public CustomerOrderController(BaseUrlConfig baseUrlConfig) {
         this.baseUrlConfig = baseUrlConfig;
-        this.restTemplate = new RestTemplate();
+//        this.restTemplate = new RestTemplate();
         gson = new Gson();
     }
 
     @GetMapping
     public ResponseEntity<Object> findAllCustomerOrder(@RequestParam(required = false) Date date) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(baseUrlConfig.getCustomerorderurl());
         if (date != null) {
             uri = new URI(baseUrlConfig.getCustomerorderurl() + "?date=" + date);
@@ -48,6 +49,7 @@ public class CustomerOrderController {
 
     @GetMapping("/{customerId}")
     public ResponseEntity<Object> findAllCustomerOrderByCustomerId(@PathVariable String customerId) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(baseUrlConfig.getCustomerorderurl());
         if (customerId != null) {
             uri = new URI(baseUrlConfig.getCustomerorderurl() + "/" + customerId);
@@ -58,6 +60,7 @@ public class CustomerOrderController {
 
     @PostMapping
     public ResponseEntity<Object> placeOrder(@RequestBody CustomerOrder customerOrder) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
         String body = getFinalBody(customerOrder);
         URI uri = new URI(baseUrlConfig.getStepfuncurl() + "/placeorder");
         HttpEntity<String> entity = new HttpEntity<>(body);

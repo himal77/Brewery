@@ -24,18 +24,19 @@ import java.net.URISyntaxException;
 public class BrewOrderController {
 
     private final BaseUrlConfig baseUrlConfig;
-    private final RestTemplate restTemplate;
+//    private final RestTemplate restTemplate;
     private final Gson gson;
 
     @Autowired
     public BrewOrderController(BaseUrlConfig baseUrlConfig) {
         this.baseUrlConfig = baseUrlConfig;
-        this.restTemplate = new RestTemplate();
+//        this.restTemplate = new RestTemplate();
         gson = new Gson();
     }
 
     @GetMapping
     public ResponseEntity<Object> findAllBrewOrder() throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(baseUrlConfig.getBreworderurl());
         ResponseEntity<Object> response = restTemplate.getForEntity(uri, Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
@@ -43,6 +44,7 @@ public class BrewOrderController {
 
     @PostMapping
     public ResponseEntity<Object> saveBrewOrder(@RequestBody BrewOrder brewOrder) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
         String body = getFinalBody(brewOrder);
         URI uri = new URI(baseUrlConfig.getStepfuncurl() + "/placeorder");
         HttpEntity<String> entity = new HttpEntity<>(body);
