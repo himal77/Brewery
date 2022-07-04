@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,19 +29,19 @@ import java.text.MessageFormat;
 public class CustomerOrderController {
 
     private final BaseUrlConfig baseUrlConfig;
-//    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
     private final Gson gson;
+    WebClient client = WebClient.create();
 
     @Autowired
     public CustomerOrderController(BaseUrlConfig baseUrlConfig) {
         this.baseUrlConfig = baseUrlConfig;
-//        this.restTemplate = new RestTemplate();
+        this.restTemplate = new RestTemplate();
         gson = new Gson();
     }
 
     @GetMapping
     public ResponseEntity<Object> findAllCustomerOrder(@RequestParam(required = false) Date date) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(baseUrlConfig.getCustomerorderurl());
         if (date != null) {
             uri = new URI(baseUrlConfig.getCustomerorderurl() + "?date=" + date);
@@ -49,7 +52,6 @@ public class CustomerOrderController {
 
     @GetMapping("/{customerId}")
     public ResponseEntity<Object> findAllCustomerOrderByCustomerId(@PathVariable String customerId) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(baseUrlConfig.getCustomerorderurl());
         if (customerId != null) {
             uri = new URI(baseUrlConfig.getCustomerorderurl() + "/" + customerId);
@@ -59,13 +61,13 @@ public class CustomerOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> placeOrder(@RequestBody CustomerOrder customerOrder) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
+    public Flux<Object> placeOrder(@RequestBody CustomerOrder customerOrder) throws URISyntaxException {
         String body = getFinalBody(customerOrder);
-        URI uri = new URI(baseUrlConfig.getStepfuncurl() + "/placeorder");
-        HttpEntity<String> entity = new HttpEntity<>(body);
-        ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.POST, entity, Object.class);
-        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+        WebClient.ResponseSpec responseSpec = client.post()
+                .uri(baseUrlConfig.getStepfuncurl() + "/placeorder")
+                .body(Mono.just(body), String.class)
+                .retrieve();
+        return responseSpec.bodyToFlux(Object.class);
     }
 
     private String getFinalBody(CustomerOrder customerOrder) {

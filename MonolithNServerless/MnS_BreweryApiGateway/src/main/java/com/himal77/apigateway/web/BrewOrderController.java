@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,32 +27,32 @@ import java.net.URISyntaxException;
 public class BrewOrderController {
 
     private final BaseUrlConfig baseUrlConfig;
-//    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
     private final Gson gson;
+    WebClient client = WebClient.create();
 
     @Autowired
     public BrewOrderController(BaseUrlConfig baseUrlConfig) {
         this.baseUrlConfig = baseUrlConfig;
-//        this.restTemplate = new RestTemplate();
+        this.restTemplate = new RestTemplate();
         gson = new Gson();
     }
 
     @GetMapping
     public ResponseEntity<Object> findAllBrewOrder() throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(baseUrlConfig.getBreworderurl());
         ResponseEntity<Object> response = restTemplate.getForEntity(uri, Object.class);
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveBrewOrder(@RequestBody BrewOrder brewOrder) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
+    public Flux<Object> saveBrewOrder(@RequestBody BrewOrder brewOrder) throws URISyntaxException {
         String body = getFinalBody(brewOrder);
-        URI uri = new URI(baseUrlConfig.getStepfuncurl() + "/placeorder");
-        HttpEntity<String> entity = new HttpEntity<>(body);
-        ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.POST, entity, Object.class);
-        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+        WebClient.ResponseSpec responseSpec = client.post()
+                .uri(baseUrlConfig.getStepfuncurl() + "/placeorder")
+                .body(Mono.just(body), String.class)
+                .retrieve();
+        return responseSpec.bodyToFlux(Object.class);
     }
 
     private String getFinalBody(BrewOrder brewOrder) {
